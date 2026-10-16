@@ -1,4 +1,4 @@
-import { BeauchefdleGame } from './game.js';
+import { BeauchldeGame } from './game.js';
 import { normalize, escapeHtml } from './utils.js';
 import { fetchDailyLeaderboard, submitDailyScore, hasSubmittedToday } from './leaderboard.js';
 
@@ -40,7 +40,7 @@ async function init() {
 
 function setupGame(data) {
   try {
-    game = new BeauchefdleGame(data);
+    game = new BeauchldeGame(data);
     DOM.loader.hidden = true;
     DOM.gameContainer.hidden = false;
     DOM.modeNav.hidden = false;
