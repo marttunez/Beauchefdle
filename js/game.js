@@ -15,7 +15,7 @@ export const COLUMN_DEFINITIONS = [
   { key: 'carreras',     label: 'Carreras',          type: 'set' }
 ];
 
-export class BeauchefdleGame {
+export class BeauchldeGame {
   constructor(database, { maxAttempts = MAX_ATTEMPTS } = {}) {
     this.db = (Array.isArray(database) ? database : database.ramos || [])
       .filter(item => item.codigo && item.nombre);
