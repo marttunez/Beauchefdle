@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="./style.css">
-  <script type="module" src="./js/app.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/app.js"></script>
 </head>
 <body>
   <div class="app-layout">
@@ -40,7 +40,10 @@
         <p><b>Abre el juego desde un servidor local.</b> Los navegadores bloquean los módulos de JavaScript al abrir el HTML directamente. En esta carpeta ejecuta <code class="mono">python -m http.server</code> y entra a <code class="mono">http://localhost:8000</code>.</p>
       </section>
 
-      <noscript><p class="panel-card">Beauchlde necesita JavaScript para funcionar.</p></noscript>
+      <noscript><p class="panel-card">Beauchefdle necesita JavaScript para funcionar.</p></noscript>
+
+      <!-- Se muestra solo si el juego no logra iniciar (archivos faltantes o error de JavaScript) -->
+      <section id="boot-error" class="panel-card" hidden></section>
 
       <!-- Si ramos.json no se pudo cargar -->
       <section id="loader" class="panel-card" hidden>
@@ -91,6 +94,50 @@
 
   <script>
     if (location.protocol === 'file:') document.getElementById('file-warning').hidden = false;
+  </script>
+
+  <script>
+    // Diagnóstico: si el juego no arranca, muestra POR QUÉ en vez de dejar la pantalla vacía.
+    (function () {
+      var REQUIRED = ['style.css', 'ramos.json', 'js/app.js', 'js/game.js', 'js/utils.js',
+                      'js/departamentos.js', 'js/leaderboard.js'];
+      var box = document.getElementById('boot-error');
+      var shown = false;
+
+      function booted() {
+        return !document.getElementById('game-container').hidden || !document.getElementById('loader').hidden;
+      }
+      function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+
+      async function diagnose(reason) {
+        if (shown || booted()) return;
+        shown = true;
+        var missing = [];
+        await Promise.all(REQUIRED.map(async function (f) {
+          try {
+            var r = await fetch(f, { cache: 'no-store' });
+            if (!r.ok) missing.push(f + ' (error ' + r.status + ')');
+          } catch (e) { missing.push(f + ' (no se pudo pedir)'); }
+        }));
+        var html = '<p><b>El juego no pudo iniciar.</b> ' + esc(reason) + '</p>';
+        if (missing.length) {
+          html += '<p>El servidor no encuentra estos archivos:</p><ul>' +
+            missing.map(function (m) { return '<li><code class="mono">' + esc(m) + '</code></li>'; }).join('') +
+            '</ul><p>Revisa que estén en el repositorio con ese nombre exacto (mayúsculas incluidas) ' +
+            'y que los <code class="mono">.js</code> estén dentro de la carpeta <code class="mono">js/</code>.</p>';
+        } else {
+          html += '<p>Todos los archivos existen, así que el problema está en el código. ' +
+            'Abre la consola del navegador (F12) para ver el mensaje de error.</p>';
+        }
+        box.innerHTML = html;
+        box.hidden = false;
+      }
+
+      window.addEventListener('error', function (e) { diagnose('Error de JavaScript: ' + e.message); });
+      var mod = document.querySelector('script[type="module"]');
+      if (mod) mod.addEventListener('error', function () { diagnose('No se pudo cargar js/app.js o alguno de sus módulos.'); });
+      setTimeout(function () { diagnose('El juego no arrancó después de unos segundos.'); }, 4000);
+    })();
   </script>
 </body>
 </html>
