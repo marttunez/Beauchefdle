@@ -1,4 +1,4 @@
-import { BeauchldeGame } from './game.js';
+import { BeauchldeGame } from 'game.js';
 import { normalize, escapeHtml } from './utils.js';
 import { fetchDailyLeaderboard, submitDailyScore, hasSubmittedToday } from './leaderboard.js';
 
