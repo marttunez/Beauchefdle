@@ -18,6 +18,7 @@ const SIGLAS = {
   'ingenieria quimica biotecnologia y materiales': 'DIQBM',
   'fisica': 'DFI',
   'geofisica': 'DGF',
+  'geologia': 'DGE',
   'astronomia': 'DAS'
 };
 

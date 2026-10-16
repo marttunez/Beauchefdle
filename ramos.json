@@ -549,7 +549,8 @@
       "area": "CC",
       "nivel": 5,
       "n_requisitos": 2,
-      "horas_total": 20
+      "horas_total": 20,
+      "nombre_en": "Software Project"
     },
     {
       "departamento": "Ciencias de la Computación",
@@ -838,6 +839,370 @@
       "nivel": 2,
       "n_requisitos": 3,
       "horas_total": 9.5
+    },
+    {
+      "codigo": "FI3001",
+      "nombre": "Nombre del",
+      "creditos": 6,
+      "horas_docencia": 3,
+      "horas_auxiliares": 1.5,
+      "horas_trabajo": 5.5,
+      "departamento": "Física",
+      "caracter": "Obligatorio",
+      "requisitos_texto": "MA2002: Cálculo Avanzado y Aplicaciones, FI2002: Electromagnetismo, FI2001: Mecánica",
+      "requisitos": [
+        "MA2002",
+        "FI2002",
+        "FI2001"
+      ],
+      "archivo": "FI3001.pdf",
+      "area": "FI",
+      "nivel": 3,
+      "n_requisitos": 3,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Geología general",
+      "codigo": "GL3101",
+      "creditos": 6,
+      "nombre_en": "Introduction to Geology",
+      "horas_docencia": 3,
+      "horas_auxiliares": 3,
+      "horas_trabajo": 4,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "MA2002: Cálculo avanzado y aplicaciones, FI2004: Termodinámica/IQ2212: Termodinámica Química",
+      "requisitos": [
+        "MA2002",
+        "FI2004",
+        "IQ2212"
+      ],
+      "archivo": "GL3101.pdf",
+      "area": "GL",
+      "nivel": 3,
+      "n_requisitos": 3,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Ciencia de los minerales I",
+      "codigo": "GL3103",
+      "creditos": 6,
+      "nombre_en": "Mineral Science I",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "FI2004: Termodinámica Física/IQ2212: Termodinámica Química",
+      "requisitos": [
+        "FI2004",
+        "IQ2212"
+      ],
+      "archivo": "GL3103.pdf",
+      "area": "GL",
+      "nivel": 3,
+      "n_requisitos": 2,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Sedimentología",
+      "codigo": "GL3201",
+      "creditos": 6,
+      "nombre_en": "Sedimentology",
+      "horas_docencia": 3,
+      "horas_auxiliares": 1.5,
+      "horas_trabajo": 5.5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3101: Geología general",
+      "requisitos": [
+        "GL3101"
+      ],
+      "archivo": "GL3201.pdf",
+      "area": "GL",
+      "nivel": 3,
+      "n_requisitos": 1,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Ciencia de los minerales II",
+      "codigo": "GL3203",
+      "creditos": 6,
+      "nombre_en": "Mineral Science II",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3103: Ciencia de los minerales I",
+      "requisitos": [
+        "GL3103"
+      ],
+      "archivo": "GL3203.pdf",
+      "area": "GL",
+      "nivel": 3,
+      "n_requisitos": 1,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Energía de Procesos Geológicos",
+      "codigo": "GL3204",
+      "creditos": 6,
+      "nombre_en": "Energy of Geological Processes",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3101: Geología General",
+      "requisitos": [
+        "GL3101"
+      ],
+      "archivo": "GL3204.pdf",
+      "area": "GL",
+      "nivel": 3,
+      "n_requisitos": 1,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Sistemas de Información Geográfica para Geología (SIGG)",
+      "codigo": "GL3205",
+      "creditos": 3,
+      "nombre_en": "Geographical Information Systems for Geology",
+      "horas_docencia": 1.5,
+      "horas_auxiliares": 1.5,
+      "horas_trabajo": 2,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3101: Geología general, GF3001: Geofísica general",
+      "requisitos": [
+        "GL3101",
+        "GF3001"
+      ],
+      "archivo": "GL3205.pdf",
+      "area": "GL",
+      "nivel": 3,
+      "n_requisitos": 2,
+      "horas_total": 5
+    },
+    {
+      "codigo": "GL4010",
+      "nombre": "Código nombre",
+      "departamento": "Geología",
+      "caracter": "Electivo",
+      "requisitos_texto": "GL4001; AUTOR Electivo de Licenciatura Resultados de Aprendizaje El estudiante demuestra que de manera independiente y con la guía de un profesor: • Puede realizar una investigación bibliográfica, o • Puede realizar un trabajo de laboratorio, o • Puede realizar un trabajo de terreno, o • Puede realizar una combinación de las actividades anteriores, en el ámbito de la Geología o de una disciplina relacionada. Metodología Docente Evaluación General • Las estrategias metodológicas a desarrollar serán La evaluación consistirá en: propuestas por el profesor guía y • pueden ser de variada índole (revisión bibliográfica, • Un informe global (100%) que será calificado experiencia de laboratorio, levantamiento de por el respectivo profesor guía del proyecto. información en terreno). • No incluye clases lectivas. • El trabajo es personal. • El tema del proyecto puede ser propuesto a un profesor por el estudiante u ofrecido por un profesor del Departamento de Geología*. * Se pueden solicitar recursos al Departamento para su realización por lo cual debe ser aprobado por el Jefe Docente.",
+      "requisitos": [
+        "GL4001"
+      ],
+      "archivo": "GL4010.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 1,
+      "horas_total": null
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Geología estructural",
+      "codigo": "GL4101",
+      "creditos": 6,
+      "nombre_en": "Structural geology",
+      "horas_docencia": 3,
+      "horas_auxiliares": 1.5,
+      "horas_trabajo": 5.5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3205: Sistemas de información geográfica para geología/AUTOR",
+      "requisitos": [
+        "GL3205"
+      ],
+      "archivo": "GL4101.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 1,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Petrología ígnea",
+      "codigo": "GL4202",
+      "creditos": 6,
+      "nombre_en": "Igneous Petrology",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3204: Energía de procesos geológicos, GL3203: Ciencia de los minerales II",
+      "requisitos": [
+        "GL3204",
+        "GL3203"
+      ],
+      "archivo": "GL4202.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 2,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Geomorfología dinámica",
+      "codigo": "GL4203",
+      "creditos": 6,
+      "nombre_en": "Geomorphology",
+      "horas_docencia": 2,
+      "horas_auxiliares": 3,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3205: Sistemas de Información Geográfica para Geología",
+      "requisitos": [
+        "GL3205"
+      ],
+      "archivo": "GL4203.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 1,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Estratigrafía",
+      "codigo": "GL4204",
+      "creditos": 3,
+      "nombre_en": "Stratigraphy",
+      "horas_docencia": 1.5,
+      "horas_auxiliares": 1.5,
+      "horas_trabajo": 2,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3201: Sedimentología",
+      "requisitos": [
+        "GL3201"
+      ],
+      "archivo": "GL4204.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 1,
+      "horas_total": 5
+    },
+    {
+      "departamento": "Geología",
+      "requisitos_texto": "GL3204: Energía de procesos geológicos",
+      "requisitos": [
+        "GL3204"
+      ],
+      "codigo": "GL4205",
+      "creditos": 6,
+      "archivo": "GL4205.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 1,
+      "horas_total": 10,
+      "nombre": "Geochemistry",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio"
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Paleontología",
+      "codigo": "GL4206",
+      "creditos": 3,
+      "nombre_en": "Paleontology",
+      "horas_docencia": 1.5,
+      "horas_auxiliares": 1.5,
+      "horas_trabajo": 2,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3201: Sedimentología",
+      "requisitos": [
+        "GL3201"
+      ],
+      "archivo": "GL4206.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 1,
+      "horas_total": 5
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Physical Volcanology",
+      "codigo": "GL4212",
+      "creditos": 6,
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL4203: Geomorfología dinámica, GL4202: Petrología Ígnea",
+      "requisitos": [
+        "GL4203",
+        "GL4202"
+      ],
+      "archivo": "GL4212.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 2,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Introducción a yacimientos minerales",
+      "codigo": "GL4401",
+      "creditos": 6,
+      "nombre_en": "Introduction to ore deposits",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "IN3301: Evaluación de proyectos, GL4205: Geoquímica",
+      "requisitos": [
+        "IN3301",
+        "GL4205"
+      ],
+      "archivo": "GL4401.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 2,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Field Geology I",
+      "codigo": "GL4402",
+      "creditos": 6,
+      "horas_docencia": 1.5,
+      "horas_auxiliares": 1.5,
+      "horas_trabajo": 7,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL4101: Geología estructural, GL4202: Petrología ígnea, GL4203: Geomorfología dinámica, GL4204: Estratigrafía",
+      "requisitos": [
+        "GL4101",
+        "GL4202",
+        "GL4203",
+        "GL4204"
+      ],
+      "archivo": "GL4402.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 4,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Geología",
+      "nombre": "Petrología metamórfica",
+      "codigo": "GL4403",
+      "creditos": 6,
+      "nombre_en": "Metamorphic Petrology",
+      "horas_docencia": 3,
+      "horas_auxiliares": 3,
+      "horas_trabajo": 4,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "GL3203: Ciencia de los minerales II, GL3204: Energía de procesos geológicos",
+      "requisitos": [
+        "GL3203",
+        "GL3204"
+      ],
+      "archivo": "GL4403.pdf",
+      "area": "GL",
+      "nivel": 4,
+      "n_requisitos": 2,
+      "horas_total": 10
     },
     {
       "departamento": "Ingeniería Matemática",
@@ -1149,7 +1514,7 @@
       "horas_docencia": 3,
       "horas_auxiliares": 0,
       "horas_trabajo": 9,
-      "caracter": null,
+      "caracter": "Obligatorio",
       "requisitos_texto": "Teoría de la Medida MA3802",
       "requisitos": [
         "MA3802"
