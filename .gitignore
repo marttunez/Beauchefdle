@@ -1,0 +1,24 @@
+# --- Secretos: NUNCA subir ---
+.env
+.env.*
+*.pem
+*.key
+secrets.*
+supabase/.env
+supabase/.temp/
+supabase/.branches/
+
+# --- Programas de curso en PDF (material de la universidad; no hace falta en el repo) ---
+programas/
+*.pdf
+
+# --- Python / Node / sistema / editores ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

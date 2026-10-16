@@ -1,0 +1,543 @@
+:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --grid: #d3e3f4;
+  --margin: #f0a5a5;
+  --ink: #14213d;
+  --muted: #55657f;
+
+  --ok: #2f9e63;
+  --part: #e3a008;
+  --bad: #c8453f;
+  --unk: #dde4ee;
+
+  --on-ok: #ffffff;
+  --on-part: #1c1500;
+  --on-bad: #ffffff;
+  --on-unk: #33415c;
+
+  /* Ancho fijo de la columna izquierda hasta la línea roja */
+  --sidebar-width: 310px;
+
+  /* Tamaño del tablero (1 = original). Escala casillas, textos y espacios por igual. */
+  --board-scale: 0.78;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+
+/* Hoja cuadriculada: fondo blanco, cuadros de 24px */
+body {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  min-height: 100vh;
+}
+
+/* Línea roja vertical fija que separa la barra izquierda del juego */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: var(--sidebar-width);
+  width: 2px;
+  background: var(--margin);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Estructura principal */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Columna izquierda fija */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  z-index: 5;
+}
+
+.sidebar-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.w-full {
+  width: 100%;
+  text-align: left;
+}
+
+/* Área derecha (el juego propiamente tal) */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 32px 36px 72px;
+  min-width: 0;
+}
+
+/* El juego es un bloque del ancho del tablero, centrado en el espacio a la derecha de la línea roja */
+#game-container {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Encabezado dentro de la columna izquierda */
+.masthead { margin: 0; }
+
+h1 {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(34px, 3.5vw, 46px);
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.035em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* Subrayado rojo a lápiz bajo el título */
+h1 .title {
+  display: inline-block;
+  padding-bottom: 0.12em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 40 1, 70 9, 110 5 S 190 2, 230 6 S 285 4, 298 5' fill='none' stroke='%23c8453f' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") left bottom / 100% 0.16em no-repeat;
+}
+
+h1 .tag {
+  font-weight: 500;
+  font-size: 0.42em;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+}
+
+.sub {
+  display: inline-block;
+  margin: 14px 0 0;
+  padding: 4px 6px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
+
+/* Barra de controles */
+.controls-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 18px;
+}
+
+#result-btn { flex: 1 1 100%; }
+
+.search-container {
+  position: relative;
+  flex: 1 1 320px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+input[type="text"]:focus {
+  outline: 3px solid var(--part);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  font-weight: 500;
+  padding: 10px 14px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+button:hover { background: var(--ink); color: var(--paper); }
+button:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+button:focus-visible { outline: 3px solid var(--part); outline-offset: 2px; }
+button:disabled { opacity: 0.5; pointer-events: none; }
+
+/* Botón del modo de juego activo: se ve "hundido" */
+.mode-btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+/* Autocompletado */
+.dropdown-list {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: 100%;   /* la barra está bajo el tablero: las sugerencias se abren hacia arriba */
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  max-height: 290px;
+  overflow-y: auto;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.dropdown-list li {
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.dropdown-list li.active,
+.dropdown-list li:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Tablero: Encabezados y celdas de resultados comparten exactamente la misma columna */
+.table-wrapper {
+  overflow-x: auto;
+  padding: 0 0 12px;
+}
+
+.board {
+  display: grid;
+  gap: 8px;
+  justify-content: start;
+  align-items: stretch;
+  zoom: var(--board-scale);
+  min-width: calc(200px + var(--cols, 4) * 110px + var(--cols, 4) * 8px);
+}
+
+.row { display: contents; }
+
+.cell {
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.head .cell {
+  min-height: 42px;
+  padding: 6px 3px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 15px;   /* 15px es lo máximo que cabe "Departamento" en una línea */
+  font-weight: 700;
+  overflow-wrap: normal;  /* una palabra nunca se parte en dos */
+  border-bottom: 2px solid var(--ink);
+  border-radius: 6px 6px 0 0;
+  justify-content: flex-end;
+  text-align: center;
+  align-items: center;
+}
+
+.head .cell:first-child {
+  text-align: left;
+  align-items: flex-start;
+}
+
+.cell.name-cell {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  justify-content: center;
+}
+.cell.name-cell b { font-weight: 600; }
+.cell.name-cell small { color: var(--muted); margin-top: 2px; }
+
+/* Celda "Ramo": el código es el título (letra a letra verde/rojo) y el nombre es el subtítulo */
+.cell.name-cell .name-code {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+}
+.code-ch { display: inline-block; }
+.code-ch.is-ok  { color: var(--ok); }
+.code-ch.is-bad { color: var(--bad); }
+.cell.name-cell .name-title {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--muted);
+}
+.new-row .code-ch {
+  animation: flip 0.45s both;
+  animation-delay: calc(var(--i) * 85ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .new-row .code-ch { animation: none !important; }
+}
+
+.cell.ok   { background: var(--ok);   color: var(--on-ok); }
+.cell.part { background: var(--part); color: var(--on-part); }
+.cell.bad  { background: var(--bad);  color: var(--on-bad); }
+.cell.unk  { background: var(--unk);  color: var(--on-unk); }
+
+/* Intentos aún no usados: casillas vacías con borde gris */
+.cell.placeholder {
+  background: var(--paper);
+  border: 2px solid #d3d6da;
+}
+
+/* Casillas de resultado: ocupan el 100% del ancho de su columna para alinear con el header */
+.cell.sq {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px;
+  text-align: center;
+  container-type: inline-size;
+}
+
+.cell.sq .mark {
+  position: absolute;
+  inset: 10%;
+  width: 80%;
+  height: 80%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.cell-text {
+  position: relative;
+  z-index: 1;
+  font-weight: 600;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.cell-text.xl { font-size: clamp(22px, 26cqw, 36px); }
+.cell-text.m  { font-size: 14px; }
+.cell-text.s  { font-size: 12px; }
+.cell-text.xs { font-size: 10.5px; -webkit-line-clamp: 8; line-clamp: 8; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.new-row .cell:not(.name-cell) {
+  animation: flip 0.45s both;
+  animation-delay: calc(var(--delay-index) * 85ms);
+}
+@keyframes flip {
+  from { transform: rotateX(90deg); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .new-row .cell { animation: none !important; }
+}
+
+/* Fin del juego */
+/* Ventana de resultado (como el modal de Wordle) */
+.end-dialog {
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  width: min(420px, calc(100vw - 32px));
+  overflow: visible;
+}
+.end-dialog::backdrop { background: rgba(255, 255, 255, 0.72); }
+.end-dialog[open] { animation: pop 0.22s ease-out; }
+@keyframes pop {
+  from { transform: translateY(12px) scale(0.97); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .end-dialog[open] { animation: none; }
+}
+
+.dialog-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  line-height: 1;
+  font-size: 15px;
+  border-radius: 999px;
+  box-shadow: none;
+}
+.dialog-close:active { transform: none; }
+
+.end-card {
+  padding: 32px 24px 24px;
+  text-align: center;
+}
+.end-card h2 {
+  margin: 0 0 16px;
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+}
+.end-card p { margin: 6px 0; }
+.end-answer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+}
+.end-answer .mono { font-size: 26px; font-weight: 700; letter-spacing: 0.06em; }
+.end-answer b { font-weight: 500; color: var(--muted); }
+.end-card.win  .end-answer .mono { color: var(--ok); }
+.end-card.lose .end-answer .mono { color: var(--bad); }
+.end-card button { margin-top: 14px; }
+
+/* Leyenda */
+.legend {
+  margin-top: 32px;
+  padding: 12px 16px;
+  background: var(--paper);
+  border: 1px solid #b9c6da;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.legend p { margin: 4px 0; }
+.legend b { color: var(--ink); }
+
+.badge {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  vertical-align: -1px;
+  margin-right: 4px;
+}
+.sw-ok   { background: var(--ok); }
+.sw-part { background: var(--part); }
+.sw-bad  { background: var(--bad); }
+.sw-unk  { background: var(--unk); }
+
+.panel-card {
+  border: 2px dashed var(--ink);
+  border-radius: 6px;
+  padding: 16px 20px;
+  background: var(--paper);
+  max-width: 600px;
+  margin-bottom: 16px;
+}
+.panel-card p { margin: 0 0 8px; }
+
+[hidden] { display: none !important; }
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 820px) {
+  :root { --sidebar-width: 210px; }
+  .sidebar { padding: 24px 16px; }
+  .main-content { padding: 24px 20px 64px; }
+}
+
+/* Estilos del Leaderboard dentro del modal */
+.dialog-divider {
+  border: 0;
+  border-top: 2px dashed #b9c6da;
+  margin: 18px 0 12px;
+}
+.leaderboard-section h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+.lb-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.lb-form input[type="text"] {
+  padding: 8px 10px;
+  font-size: 14px;
+}
+.lb-form button {
+  margin-top: 0;
+  padding: 8px 12px;
+}
+.lb-ranking {
+  margin: 8px 0 0;
+  padding: 0 0 0 22px;
+  max-height: 180px;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 14px;
+}
+.lb-ranking li {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--grid);
+}
+.lb-ranking li .lb-user {
+  font-weight: 600;
+}
+.lb-ranking li .lb-score {
+  float: right;
+  color: var(--muted);
+}
