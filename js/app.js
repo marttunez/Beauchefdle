@@ -19,7 +19,13 @@ const DOM = {
   board: document.getElementById('board'),
   endDialog: document.getElementById('end-dialog'),
   endCard: document.getElementById('end-card'),
-  endClose: document.getElementById('end-close')
+  endClose: document.getElementById('end-close'),
+  // Controles de menú lateral móvil
+  sidebar: document.getElementById('sidebar'),
+  sidebarBackdrop: document.getElementById('sidebar-backdrop'),
+  menuToggle: document.getElementById('menu-toggle'),
+  sidebarClose: document.getElementById('sidebar-close'),
+  mobileModeBadge: document.getElementById('mobile-mode-badge')
 };
 
 // Espera antes de abrir la ventana de resultado, para que se vea terminar la animación de la última fila
@@ -54,6 +60,7 @@ function startSession(daily) {
   clearTimeout(endTimer);
   game.startNewGame(daily);
   closeEndDialog();
+  closeMobileDrawer();
   DOM.searchInput.value = '';
   hideSuggestions();
   updateModeButtons();
@@ -71,6 +78,20 @@ function syncControls() {
   DOM.resultBtn.hidden = !game.finished;
 }
 
+function openMobileDrawer() {
+  if (!DOM.sidebar) return;
+  DOM.sidebar.classList.add('is-open');
+  if (DOM.sidebarBackdrop) DOM.sidebarBackdrop.hidden = false;
+  if (DOM.menuToggle) DOM.menuToggle.setAttribute('aria-expanded', 'true');
+}
+
+function closeMobileDrawer() {
+  if (!DOM.sidebar) return;
+  DOM.sidebar.classList.remove('is-open');
+  if (DOM.sidebarBackdrop) DOM.sidebarBackdrop.hidden = true;
+  if (DOM.menuToggle) DOM.menuToggle.setAttribute('aria-expanded', 'false');
+}
+
 function attachEvents() {
   DOM.fileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
@@ -83,12 +104,29 @@ function attachEvents() {
     }
   });
 
+  if (DOM.menuToggle) {
+    DOM.menuToggle.addEventListener('click', () => {
+      const isOpen = DOM.sidebar.classList.contains('is-open');
+      if (isOpen) closeMobileDrawer();
+      else openMobileDrawer();
+    });
+  }
+  if (DOM.sidebarClose) {
+    DOM.sidebarClose.addEventListener('click', closeMobileDrawer);
+  }
+  if (DOM.sidebarBackdrop) {
+    DOM.sidebarBackdrop.addEventListener('click', closeMobileDrawer);
+  }
+
   DOM.modeNav.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-mode]');
     if (!btn || !game) return;
     const daily = btn.dataset.mode === 'daily';
-    if (daily && game.isDaily) return;  // ya estás en el ramo del día
-    startSession(daily);                // práctica: cada clic es un ramo nuevo
+    if (daily && game.isDaily) {
+      closeMobileDrawer();
+      return; // ya estás en el ramo del día
+    }
+    startSession(daily); // práctica: cada clic es un ramo nuevo
   });
 
   DOM.resultBtn.addEventListener('click', () => {
@@ -113,6 +151,12 @@ function attachEvents() {
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.search-container')) {
       hideSuggestions();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && DOM.sidebar && DOM.sidebar.classList.contains('is-open')) {
+      closeMobileDrawer();
     }
   });
 }
@@ -163,7 +207,7 @@ function codeHtml(guessCode, answerCode) {
 function applyGrid() {
   const n = game.activeColumns.length;
   DOM.board.style.setProperty('--cols', n);
-  DOM.board.style.gridTemplateColumns = `minmax(200px, 260px) repeat(${n}, 116px)`;
+  DOM.board.style.setProperty('--rows', game.maxAttempts);
 }
 
 function renderBoard(animateLast = false) {
@@ -171,7 +215,7 @@ function renderBoard(animateLast = false) {
 
   let html = `
     <div class="row head">
-      <div class="cell">Ramo</div>
+      <div class="cell name-head">Ramo</div>
       ${game.activeColumns.map(col => `<div class="cell">${escapeHtml(col.label)}</div>`).join('')}
     </div>
   `;
@@ -222,6 +266,9 @@ function updateModeButtons() {
     const active = (btn.dataset.mode === 'daily') === game.isDaily;
     btn.setAttribute('aria-pressed', String(active));
   });
+  if (DOM.mobileModeBadge) {
+    DOM.mobileModeBadge.textContent = game.isDaily ? 'Ramo del día' : 'Práctica libre';
+  }
 }
 
 function chooseGuess(course) {
@@ -232,6 +279,7 @@ function chooseGuess(course) {
   renderBoard(true);
   hideSuggestions();
   DOM.searchInput.value = '';
+  DOM.searchInput.blur();
 
   if (game.finished) {
     syncControls();
@@ -315,7 +363,7 @@ async function loadLeaderboardUI() {
   if (!container) return;
   try {
     const rows = await fetchDailyLeaderboard();
-    if (! Array.isArray(rows) || rows.length === 0) {
+    if (!Array.isArray(rows) || rows.length === 0) {
       container.innerHTML = '<small>Aún no hay resultados hoy. ¡Sé el primero!</small>';
       return;
     }

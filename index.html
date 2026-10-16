@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#ffffff">
   <title>Beauchefdle</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2314213d'/%3E%3Cpath d='M16 16h32M16 28h32M16 40h32M16 52h32M16 16v36M28 16v36M40 16v36M52 16v36' stroke='%23fff' stroke-opacity='.35' stroke-width='2'/%3E%3Crect x='28' y='28' width='12' height='12' fill='%232f9e63'/%3E%3C/svg%3E">
@@ -16,8 +16,28 @@
 </head>
 <body>
   <div class="app-layout">
-    <!-- Columna izquierda fija (al lado izquierdo de la línea roja) -->
-    <aside class="sidebar">
+    <!-- Cabecera exclusiva para celular (con la línea roja horizontal abajo) -->
+    <header class="mobile-topbar">
+      <button type="button" id="menu-toggle" class="menu-toggle" aria-label="Abrir menú de modos" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="mobile-brand">
+        <span class="title">Beauchefdle</span>
+        <span id="mobile-mode-badge" class="mobile-mode-badge">Ramo del día</span>
+      </div>
+    </header>
+
+    <!-- Fondo oscuro al abrir la barra lateral en celular -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
+
+    <!-- Columna izquierda en PC / Barra lateral desplegable en celular -->
+    <aside id="sidebar" class="sidebar" aria-label="Menú principal">
+      <button type="button" id="sidebar-close" class="sidebar-close" aria-label="Cerrar menú">✕</button>
+
       <header class="masthead">
         <h1>
           <span class="title">Beauchefdle</span>
@@ -26,14 +46,15 @@
         <p class="sub">¡El famoso juego del New York Times llega a Beauchef!</p>
       </header>
 
-      <!-- Un botón por modo de juego (para agregar otro: nuevo botón con data-mode) -->
+      <!-- Un botón por modo de juego -->
       <nav id="mode-nav" class="sidebar-options" aria-label="Modos de juego" hidden>
+        <p class="sidebar-section-label">Modo de juego</p>
         <button type="button" class="mode-btn w-full" data-mode="daily" aria-pressed="false">Ramo del día</button>
         <button type="button" class="mode-btn w-full" data-mode="practice" aria-pressed="false">Práctica libre</button>
       </nav>
     </aside>
 
-    <!-- Contenido principal del juego (al lado derecho de la línea roja) -->
+    <!-- Contenido principal del juego -->
     <main class="main-content">
       <!-- Solo se muestra si abres el archivo con doble clic (file://) -->
       <section id="file-warning" class="panel-card" hidden>
@@ -42,7 +63,7 @@
 
       <noscript><p class="panel-card">Beauchefdle necesita JavaScript para funcionar.</p></noscript>
 
-      <!-- Se muestra solo si el juego no logra iniciar (archivos faltantes o error de JavaScript) -->
+      <!-- Se muestra solo si el juego no logra iniciar -->
       <section id="boot-error" class="panel-card" hidden></section>
 
       <!-- Si ramos.json no se pudo cargar -->
@@ -76,11 +97,11 @@
         <footer class="legend">
           <p>
             <span class="badge sw-ok"></span><b>Verde</b>: coincide.
-            <span class="badge sw-part"></span><b>Amarillo</b>: coincide en parte.
+            <span class="badge sw-part"></span><b>Amarillo</b>: parcial.
             <span class="badge sw-bad"></span><b>Rojo</b>: distinto.
-            <span class="badge sw-unk"></span><b>Gris</b>: sin información.
+            <span class="badge sw-unk"></span><b>Gris</b>: sin info.
           </p>
-          <p>En columnas numéricas, la flecha de fondo indica hacia dónde está el valor buscado: <b>↑</b> es mayor que el tuyo y <b>↓</b> es menor.</p>
+          <p class="legend-sub">En números: <b>↑</b> el buscado es mayor · <b>↓</b> es menor.</p>
         </footer>
       </section>
     </main>
