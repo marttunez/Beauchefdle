@@ -322,7 +322,7 @@ function showEndScreen(won) {
     ${game.isDaily ? `
       <hr class="dialog-divider">
       <div class="leaderboard-section">
-        <h3>Ranking del día (Chile)</h3>
+        <h3>Ranking del día</h3>
         ${canSubmit ? `
           <form id="lb-form" class="lb-form">
             <input type="text" id="lb-name" placeholder="Tu apodo (2-20 letras)" minlength="2" maxlength="20" required autocomplete="off">

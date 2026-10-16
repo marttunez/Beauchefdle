@@ -150,6 +150,12 @@ body {
   color: #ffffff;
 }
 
+/* Solo el botón de Ramo del día activo se ve verde */
+.mode-btn.is-daily-active[aria-pressed="true"] {
+  background: var(--ok-bg);
+  color: var(--ok-ink);
+}
+
 .main-content {
   padding: 1.75rem 2rem;
   overflow-x: hidden;
@@ -222,7 +228,6 @@ body {
   overflow: hidden;
 }
 
-/* Celdas de indicadores cuadradas */
 .cell.sq {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -516,9 +521,6 @@ body {
 
 /* =========================================================
    VISTA EN CELULAR (<= 860px)
-   - Con margen a izquierda y derecha (centrado)
-   - Indicadores CUADRADOS (aspect-ratio: 1 / 1)
-   - Buscador pegado debajo de los intentos, no al fondo
    ========================================================= */
 @media (max-width: 860px) {
   html, body {
@@ -535,7 +537,6 @@ body {
     overflow: hidden;
   }
 
-  /* Cabecera móvil con línea roja horizontal */
   .mobile-topbar {
     display: flex;
     align-items: center;
@@ -591,7 +592,6 @@ body {
     white-space: nowrap;
   }
 
-  /* Fondo oscuro y barra lateral desplegable */
   .sidebar-backdrop {
     display: block;
     position: fixed;
@@ -648,7 +648,6 @@ body {
     color: var(--ink-muted);
   }
 
-  /* Centra el área de juego y deja margen libre a izquierda y derecha */
   .main-content {
     flex: 1;
     min-height: 0;
@@ -657,19 +656,19 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Agrupa el tablero + buscador más al centro */
+    justify-content: center;
     overflow: hidden;
   }
 
   #game-container {
     width: 100%;
-    max-width: 430px; /* Limita el ancho para que las cajas sean cuadradas compactas y quede aire a los lados */
+    max-width: 430px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.65rem; /* Espacio corto entre el tablero y la barra de intento */
+    gap: 0.65rem;
   }
 
   .table-wrapper {
@@ -682,13 +681,10 @@ body {
     width: 100%;
     height: auto;
     gap: 4px;
-    /* Ramo un poco más ancho (1.55fr) y cada indicador de 1fr */
     grid-template-columns: minmax(0, 1.55fr) repeat(var(--cols), minmax(0, 1fr));
-    /* La altura de cada fila la dicta el aspect-ratio: 1/1 de los indicadores cuadrados */
     grid-template-rows: 22px repeat(var(--rows), auto);
   }
 
-  /* Mostrar nombres abreviados de columnas en celular */
   .label-full {
     display: none;
   }
@@ -716,7 +712,6 @@ body {
     padding: 2px;
   }
 
-  /* Fuerza que cada indicador (Depto, Créditos, Nivel, etc.) sea un CUADRADO */
   .cell.sq {
     width: 100%;
     height: auto;
@@ -724,7 +719,6 @@ body {
     min-height: 0;
   }
 
-  /* La celda del Ramo toma la misma altura de los cuadrados de su fila */
   .name-cell {
     height: 100%;
     min-height: 0;
@@ -759,7 +753,6 @@ body {
     word-break: break-word;
   }
 
-  /* Textos dentro de los cuadrados */
   .cell-text {
     line-height: 1.05;
     word-break: break-word;
@@ -776,7 +769,6 @@ body {
     opacity: 0.2;
   }
 
-  /* Barra para ingresar el intento justo debajo del tablero, no pegada al fondo */
   .controls-bar {
     width: 100%;
     flex-shrink: 0;
