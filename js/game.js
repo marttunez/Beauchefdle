@@ -10,7 +10,6 @@ export const COLUMN_DEFINITIONS = [
   { key: 'caracter',     label: 'Carácter',          type: 'exact' },
   { key: 'requisitos',   label: 'Requisitos',        type: 'set', allowEmpty: true },
   { key: 'nivel',        label: 'Nivel',             type: 'num' },
-  
   { key: 'semestre',     label: 'Semestre',          type: 'num' },
   { key: 'carreras',     label: 'Carreras',          type: 'set' }
 ];
@@ -18,7 +17,7 @@ export const COLUMN_DEFINITIONS = [
 export class BeauchldeGame {
   constructor(database, { maxAttempts = MAX_ATTEMPTS } = {}) {
     this.db = (Array.isArray(database) ? database : database.ramos || [])
-      .filter(item => item.codigo && item.nombre);
+      .filter(item => item && item.codigo && item.nombre);
 
     if (this.db.length < 2) {
       throw new Error('La base requiere al menos 2 ramos válidos con código y nombre.');
@@ -74,7 +73,7 @@ export class BeauchldeGame {
 
   // Ganó si el ramo buscado está entre sus intentos
   get won() {
-    return this.guesses.some(g => g.codigo === this.answer.codigo);
+    return Boolean(this.answer && this.guesses.some(g => g.codigo === this.answer.codigo));
   }
 
   getStoreKey() {
@@ -90,8 +89,8 @@ export class BeauchldeGame {
       .sort((a, b) => a.codigo.localeCompare(b.codigo));
 
     if (this.isDaily) {
-        const index = fnv1aHash(`beauchefdle-cl-${getTodayKey()}`) % pool.length;
-        return pool[index];
+      const index = fnv1aHash(`beauchefdle-cl-${getTodayKey()}`) % pool.length;
+      return pool[index];
     }
     return pool[Math.floor(Math.random() * pool.length)];
   }
@@ -159,11 +158,17 @@ export class BeauchldeGame {
     }
 
     if (colDef.type === 'num') {
-      const isMatch = gv === av;
+      const gNum = Number(gv);
+      const aNum = Number(av);
+      if (Number.isNaN(gNum) || Number.isNaN(aNum)) {
+        const isMatch = String(gv) === String(av);
+        return { status: isMatch ? 'ok' : 'bad', text: String(gv), arrow: null };
+      }
+      const isMatch = gNum === aNum;
       return {
         status: isMatch ? 'ok' : 'bad',
-        text: gv,
-        arrow: isMatch ? null : (av > gv ? '↑' : '↓')
+        text: String(gv),
+        arrow: isMatch ? null : (aNum > gNum ? '↑' : '↓')
       };
     }
 
@@ -181,7 +186,7 @@ export class BeauchldeGame {
 
       return {
         status,
-        text: Array.isArray(gv) ? (gv.length ? gv.join(', ') : 'Ninguno') : gv,
+        text: Array.isArray(gv) ? (gv.length ? gv.join(', ') : 'Ninguno') : String(gv),
         arrow: null
       };
     }
@@ -204,7 +209,6 @@ export class BeauchldeGame {
     this.saveDailyProgress();
     return { won, course };
   }
-
 
   generateShareText() {
     const emojis = { ok: '🟩', part: '🟨', bad: '🟥', unk: '⬜' };

@@ -1,4 +1,4 @@
-import { BeauchldeGame } from 'game.js';
+import { BeauchldeGame } from './game.js';
 import { normalize, escapeHtml } from './utils.js';
 import { fetchDailyLeaderboard, submitDailyScore, hasSubmittedToday } from './leaderboard.js';
 
@@ -143,8 +143,9 @@ function textSize(text) {
 // Letras y números se comparan por separado, así "CC" y "XXXX" quedan alineados.
 function codeHtml(guessCode, answerCode) {
   const split = c => {
-    const m = /^([A-Za-z]+)(\d+)$/.exec(c);
-    return m ? [m[1], m[2]] : [c, ''];
+    const str = String(c || '').trim();
+    const m = /^([A-Za-z]+)(.*)$/.exec(str);
+    return m ? [m[1], m[2]] : [str, ''];
   };
   const [gl, gn] = split(guessCode);
   const [al, an] = split(answerCode);
@@ -314,7 +315,7 @@ async function loadLeaderboardUI() {
   if (!container) return;
   try {
     const rows = await fetchDailyLeaderboard();
-    if (rows.length === 0) {
+    if (! Array.isArray(rows) || rows.length === 0) {
       container.innerHTML = '<small>Aún no hay resultados hoy. ¡Sé el primero!</small>';
       return;
     }
@@ -323,7 +324,7 @@ async function loadLeaderboardUI() {
         ${rows.map(r => `
           <li>
             <span class="lb-user">${escapeHtml(r.apodo)}</span>
-            <span class="mono lb-score">${r.gano ? `${Number(r.intentos)}/6` : 'X/6'}</span>
+            <span class="mono lb-score">${r.gano ? `${Number(r.intentos)}/${game.maxAttempts}` : `X/${game.maxAttempts}`}</span>
           </li>
         `).join('')}
       </ol>

@@ -134,6 +134,9 @@
       }
 
       window.addEventListener('error', function (e) { diagnose('Error de JavaScript: ' + e.message); });
+      window.addEventListener('unhandledrejection', function (e) {
+        diagnose('Error en promesa: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+      });
       var mod = document.querySelector('script[type="module"]');
       if (mod) mod.addEventListener('error', function () { diagnose('No se pudo cargar js/app.js o alguno de sus módulos.'); });
       setTimeout(function () { diagnose('El juego no arrancó después de unos segundos.'); }, 4000);
