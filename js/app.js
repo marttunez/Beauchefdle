@@ -6,6 +6,17 @@ let game = null;
 let currentMatches = [];
 let selectedIndex = -1;
 
+// Etiquetas cortas para que los encabezados entren sin cortarse en celular
+const SHORT_LABELS = {
+  departamento: 'Depto.',
+  creditos:     'Créd.',
+  caracter:     'Carác.',
+  requisitos:   'Req.',
+  nivel:        'Nivel',
+  semestre:     'Sem.',
+  carreras:     'Carr.'
+};
+
 const DOM = {
   loader: document.getElementById('loader'),
   fileInput: document.getElementById('file-input'),
@@ -20,7 +31,6 @@ const DOM = {
   endDialog: document.getElementById('end-dialog'),
   endCard: document.getElementById('end-card'),
   endClose: document.getElementById('end-close'),
-  // Controles de menú lateral móvil
   sidebar: document.getElementById('sidebar'),
   sidebarBackdrop: document.getElementById('sidebar-backdrop'),
   menuToggle: document.getElementById('menu-toggle'),
@@ -28,7 +38,6 @@ const DOM = {
   mobileModeBadge: document.getElementById('mobile-mode-badge')
 };
 
-// Espera antes de abrir la ventana de resultado, para que se vea terminar la animación de la última fila
 const REVEAL_DELAY_MS = 1100;
 let endTimer = null;
 
@@ -68,11 +77,10 @@ function startSession(daily) {
   syncControls();
 
   if (game.finished) {
-    showEndScreen(game.won);  // partida ya terminada (por ejemplo, al recargar la página)
+    showEndScreen(game.won);
   }
 }
 
-// Partida terminada: la barra de búsqueda se cambia por el botón "Ver resultado"
 function syncControls() {
   DOM.searchWrap.hidden = game.finished;
   DOM.resultBtn.hidden = !game.finished;
@@ -124,9 +132,9 @@ function attachEvents() {
     const daily = btn.dataset.mode === 'daily';
     if (daily && game.isDaily) {
       closeMobileDrawer();
-      return; // ya estás en el ramo del día
+      return;
     }
-    startSession(daily); // práctica: cada clic es un ramo nuevo
+    startSession(daily);
   });
 
   DOM.resultBtn.addEventListener('click', () => {
@@ -134,7 +142,7 @@ function attachEvents() {
   });
   DOM.endClose.addEventListener('click', closeEndDialog);
   DOM.endDialog.addEventListener('click', (e) => {
-    if (e.target === DOM.endDialog) closeEndDialog();  // clic en el fondo
+    if (e.target === DOM.endDialog) closeEndDialog();
   });
 
   DOM.searchInput.addEventListener('input', handleSearchInput);
@@ -162,12 +170,11 @@ function attachEvents() {
 }
 
 const MARKS = {
-  ok:   '',   // las casillas verdes no llevan marca de fondo
+  ok:   '',
   part: '<svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M14 54 C 28 30, 40 30, 50 50 S 72 70, 86 46"/></svg>',
   bad:  '<svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M24 24 L76 76 M76 24 L24 76"/></svg>',
   unk:  ''
 };
-// En columnas numéricas con error, la flecha de fondo reemplaza a la X (apunta hacia el valor buscado)
 const ARROW_MARKS = {
   '↑': '<svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 86 L50 16 M22 44 L50 16 L78 44"/></svg>',
   '↓': '<svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 14 L50 84 M22 56 L50 84 L78 56"/></svg>'
@@ -178,13 +185,11 @@ const STATUS_LABEL = { ok: 'Coincide', part: 'Coincide en parte', bad: 'Distinto
 function textSize(text) {
   const n = String(text).length;
   if (n <= 4) return 'xl';
-  if (n <= 22) return 'm';
-  if (n <= 60) return 's';
+  if (n <= 14) return 'm';
+  if (n <= 32) return 's';
   return 'xs';
 }
 
-// Colorea cada carácter del código según coincida (misma posición) con el ramo buscado.
-// Letras y números se comparan por separado, así "CC" y "XXXX" quedan alineados.
 function codeHtml(guessCode, answerCode) {
   const split = c => {
     const str = String(c || '').trim();
@@ -216,7 +221,15 @@ function renderBoard(animateLast = false) {
   let html = `
     <div class="row head">
       <div class="cell name-head">Ramo</div>
-      ${game.activeColumns.map(col => `<div class="cell">${escapeHtml(col.label)}</div>`).join('')}
+      ${game.activeColumns.map(col => {
+        const short = SHORT_LABELS[col.key] || col.label;
+        return `
+          <div class="cell" title="${escapeHtml(col.label)}">
+            <span class="label-full">${escapeHtml(col.label)}</span>
+            <span class="label-short">${escapeHtml(short)}</span>
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
 
@@ -239,7 +252,7 @@ function renderBoard(animateLast = false) {
 
     html += `
       <div class="${rowClass}">
-        <div class="cell name-cell">
+        <div class="cell name-cell" title="${escapeHtml(guess.codigo + ' — ' + guess.nombre)}">
           <div class="name-code mono">${code.html}<span class="sr-only">Código ${escapeHtml(guess.codigo)}: ${code.ok} de ${code.total} caracteres correctos</span></div>
           <div class="name-title">${escapeHtml(guess.nombre)}</div>
         </div>
@@ -248,7 +261,6 @@ function renderBoard(animateLast = false) {
     `;
   });
 
-  // Intentos que aún no se usan: casillas vacías, como en Wordle
   for (let i = game.guesses.length; i < game.maxAttempts; i++) {
     html += `
       <div class="row">
@@ -382,7 +394,6 @@ async function loadLeaderboardUI() {
   }
 }
 
-/* Sugerencias */
 function hideSuggestions() {
   DOM.suggestions.hidden = true;
   selectedIndex = -1;

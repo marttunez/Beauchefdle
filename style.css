@@ -35,7 +35,6 @@ body {
   font-family: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
   color: var(--ink);
   background-color: var(--bg-paper);
-  /* Cuadrícula tipo cuaderno universitario */
   background-image:
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
@@ -60,7 +59,7 @@ body {
 }
 
 /* =========================================================
-   LAYOUT PRINCIPAL (ESCRITORIO)
+   LAYOUT PRINCIPAL (COMPUTADOR > 860px)
    ========================================================= */
 .app-layout {
   display: grid;
@@ -71,11 +70,11 @@ body {
 .mobile-topbar,
 .sidebar-close,
 .sidebar-backdrop,
-.sidebar-section-label {
+.sidebar-section-label,
+.label-short {
   display: none;
 }
 
-/* Columna izquierda (al lado izquierdo de la línea roja vertical) */
 .sidebar {
   padding: 2rem 1.5rem;
   border-right: 2.5px solid var(--margin-red);
@@ -151,7 +150,6 @@ body {
   color: #ffffff;
 }
 
-/* Contenido principal (derecha de la línea roja en PC) */
 .main-content {
   padding: 1.75rem 2rem;
   overflow-x: hidden;
@@ -179,7 +177,7 @@ body {
 }
 
 /* =========================================================
-   TABLERO Y CELDAS
+   TABLERO Y CELDAS (COMPUTADOR)
    ========================================================= */
 .table-wrapper {
   width: 100%;
@@ -273,11 +271,11 @@ body {
   color: var(--ink);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Estados de color */
 .cell.sq.ok {
   background: var(--ok-bg);
   color: var(--ok-ink);
@@ -295,7 +293,6 @@ body {
   color: var(--unk-ink);
 }
 
-/* Marca de agua SVG de fondo (flechas ↑/↓, X, onda) */
 .cell .mark {
   position: absolute;
   inset: 8%;
@@ -323,7 +320,6 @@ body {
 .cell-text.s  { font-size: 0.78rem; }
 .cell-text.xs { font-size: 0.68rem; }
 
-/* Animación de entrada para nueva fila */
 @keyframes popIn {
   0%   { opacity: 0; transform: scale(0.88); }
   100% { opacity: 1; transform: scale(1); }
@@ -411,7 +407,6 @@ body {
   box-shadow: 2px 2px 0 var(--margin-red);
 }
 
-/* Leyenda */
 .legend {
   font-size: 0.82rem;
   color: var(--ink-muted);
@@ -520,18 +515,13 @@ body {
 
 /* =========================================================
    VISTA EN CELULAR (<= 860px)
-   - Línea roja HORIZONTAL arriba
-   - Barra lateral oculta que entra/sale (drawer)
-   - Los 6 intentos caben siempre en la pantalla
+   - SIN scroll horizontal ni vertical
+   - Todas las columnas y los 6 intentos caben en pantalla
    ========================================================= */
 @media (max-width: 860px) {
-  :root {
-    --name-col-w: 126px;
-    --sq-col-w: 76px;
-  }
-
   html, body {
     height: 100dvh;
+    width: 100vw;
     overflow: hidden;
   }
 
@@ -539,17 +529,18 @@ body {
     display: flex;
     flex-direction: column;
     height: 100dvh;
+    width: 100%;
     overflow: hidden;
   }
 
-  /* Cabecera móvil con la línea roja horizontal debajo */
+  /* Cabecera móvil con línea roja horizontal */
   .mobile-topbar {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    padding: 0.45rem 0.75rem;
-    background: rgba(253, 252, 247, 0.95);
-    border-bottom: 2.5px solid var(--margin-red); /* Línea roja horizontal */
+    gap: 0.55rem;
+    padding: 0.35rem 0.6rem;
+    background: rgba(253, 252, 247, 0.96);
+    border-bottom: 2.5px solid var(--margin-red);
     flex-shrink: 0;
     z-index: 20;
   }
@@ -559,9 +550,9 @@ body {
     border: 1.8px solid var(--ink);
     background: var(--surface);
     color: var(--ink);
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -572,32 +563,33 @@ body {
 
   .mobile-brand {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     width: 100%;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
-  .mobile-brand .title {
-    font-size: 1.35rem;
+  .mobile-brand .title,
+  .mobile-brand .mobile-title {
+    font-size: 1.2rem;
     font-weight: 800;
     letter-spacing: -0.03em;
   }
 
   .mobile-mode-badge {
-    font-size: 0.72rem;
+    font-size: 0.66rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--margin-red);
     background: #ffe4e6;
     border: 1px solid var(--margin-red);
-    padding: 0.15rem 0.45rem;
+    padding: 0.12rem 0.4rem;
     border-radius: 999px;
     white-space: nowrap;
   }
 
-  /* Fondo oscuro cuando se abre la barra lateral */
+  /* Fondo oscuro y barra lateral desplegable */
   .sidebar-backdrop {
     display: block;
     position: fixed;
@@ -607,13 +599,12 @@ body {
     z-index: 90;
   }
 
-  /* Barra lateral deslizable que se esconde a la izquierda */
   .sidebar {
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
-    width: min(280px, 82vw);
+    width: min(270px, 80vw);
     z-index: 100;
     background: var(--bg-paper);
     border-right: 3px solid var(--margin-red);
@@ -655,48 +646,63 @@ body {
     color: var(--ink-muted);
   }
 
-  /* Contenedor principal ocupa el resto de la pantalla sin desbordar */
+  /* Contenedor principal ajustado al 100% de ancho y alto */
   .main-content {
     flex: 1;
     min-height: 0;
     width: 100%;
-    padding: 0.4rem 0.5rem 0.45rem;
+    padding: 0.3rem 0.3rem 0.35rem;
     overflow: hidden;
   }
 
   #game-container {
     flex: 1;
     min-height: 0;
+    width: 100%;
     height: 100%;
-    gap: 0.4rem;
+    gap: 0.3rem;
     justify-content: space-between;
   }
 
-  /* El área del tablero se estira y reparte la altura entre las 6 oportunidades */
+  /* Sin scroll horizontal ni vertical: todo entra en el 100% del ancho */
   .table-wrapper {
     flex: 1;
     min-height: 0;
+    width: 100%;
     height: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 2px;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
+    padding-bottom: 0;
   }
 
   .board {
+    width: 100%;
     height: 100%;
-    gap: 4px;
-    grid-template-columns: var(--name-col-w) repeat(var(--cols), var(--sq-col-w));
-    grid-template-rows: 26px repeat(var(--rows), minmax(0, 1fr));
+    gap: 2.5px;
+    /* Ramo ocupa ~1.55 partes y cada atributo ocupa 1 parte igual */
+    grid-template-columns: minmax(0, 1.55fr) repeat(var(--cols), minmax(0, 1fr));
+    grid-template-rows: 20px repeat(var(--rows), minmax(0, 1fr));
+  }
+
+  /* Mostrar nombres abreviados de columnas en celular */
+  .label-full {
+    display: none;
+  }
+  .label-short {
+    display: inline;
   }
 
   .row.head .cell {
     min-height: 0;
     height: 100%;
-    font-size: 0.62rem;
-    padding: 0.15rem 0.25rem;
-    border-radius: 6px;
-    border-width: 1.5px;
+    font-size: 0.48rem;
+    letter-spacing: 0;
+    padding: 1px;
+    border-radius: 4px;
+    border-width: 1px;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .cell,
@@ -704,90 +710,101 @@ body {
   .name-cell {
     height: 100%;
     min-height: 0;
-    border-width: 1.5px;
-    border-radius: 7px;
-    padding: 0.2rem 0.25rem;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 2px;
   }
 
-  /* Fija la primera columna ("Ramo") al deslizar hacia los lados en celular */
-  .row.head .name-head,
-  .name-cell {
-    position: sticky;
-    left: 0;
-    z-index: 5;
+  .cell.placeholder {
+    border-width: 1px;
   }
 
   .name-cell {
-    background: var(--surface);
-    padding: 0.2rem 0.35rem;
-    gap: 0.1rem;
-    box-shadow: 2px 0 4px rgba(20, 33, 61, 0.08);
-  }
-
-  .name-cell.placeholder {
-    background: rgba(253, 252, 247, 0.92);
+    padding: 2px 3px;
+    gap: 1px;
+    justify-content: center;
   }
 
   .name-code {
-    font-size: 0.66rem;
+    font-size: 0.5rem;
     gap: 1px;
+    flex-wrap: nowrap;
+    max-width: 100%;
   }
 
   .code-ch {
-    padding: 0 2.5px;
-    border-radius: 3px;
+    padding: 0 1.5px;
+    border-radius: 2px;
+    font-size: 0.48rem;
+    line-height: 1.15;
   }
 
   .name-title {
-    font-size: 0.64rem;
-    line-height: 1.1;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    line-clamp: 2;
-    -webkit-line-clamp: 2;
+    font-size: 0.5rem;
+    line-height: 1.05;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    word-break: break-word;
   }
 
-  .cell-text.xl { font-size: 0.95rem; }
-  .cell-text.m  { font-size: 0.72rem; }
-  .cell-text.s  { font-size: 0.62rem; }
-  .cell-text.xs { font-size: 0.55rem; }
+  /* Textos dentro de las casillas de colores */
+  .cell-text {
+    line-height: 1.05;
+    word-break: break-word;
+    hyphens: auto;
+  }
 
-  /* Barra de búsqueda compacta abajo y sugerencias abriendo hacia arriba */
+  .cell-text.xl { font-size: 0.76rem; }
+  .cell-text.m  { font-size: 0.52rem; }
+  .cell-text.s  { font-size: 0.45rem; }
+  .cell-text.xs { font-size: 0.4rem; }
+
+  .cell .mark {
+    stroke-width: 11;
+    opacity: 0.2;
+  }
+
+  /* Barra inferior compacta */
   .controls-bar {
     flex-shrink: 0;
     max-width: 100%;
   }
 
   #search-input {
-    padding: 0.55rem 0.75rem;
-    font-size: 0.9rem;
-    border-width: 1.8px;
-    border-radius: 8px;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.85rem;
+    border-width: 1.5px;
+    border-radius: 7px;
     box-shadow: 2px 2px 0 var(--ink);
   }
 
   #result-btn {
     width: 100%;
-    padding: 0.55rem 0.9rem;
-    font-size: 0.9rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 7px;
   }
 
   .dropdown-list {
     top: auto;
-    bottom: calc(100% + 6px);
+    bottom: calc(100% + 5px);
     max-height: 42dvh;
   }
 
   .dropdown-list li {
-    padding: 0.45rem 0.65rem;
-    font-size: 0.82rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.78rem;
   }
 
-  /* Leyenda de una sola línea compacta para no quitar espacio a las 6 filas */
   .legend {
     flex-shrink: 0;
-    font-size: 0.66rem;
-    gap: 0.1rem;
+    font-size: 0.58rem;
+    gap: 0;
+  }
+
+  .legend p {
+    gap: 0.22rem;
+    justify-content: center;
   }
 
   .legend .legend-sub {
@@ -795,7 +812,8 @@ body {
   }
 
   .badge {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
+    margin-left: 0.2rem;
   }
 }
