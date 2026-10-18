@@ -16,9 +16,10 @@ const SIGLAS = {
   'ingenieria civil': 'DIC',
   'ingenieria de minas': 'DIMIN',
   'ingenieria quimica biotecnologia y materiales': 'DIQBM',
+  'ingeniería y ciencias (plan común)': 'CD',
   'fisica': 'DFI',
   'geofisica': 'DGF',
-  'geologia': 'DGE',
+  'geologia': 'GEO',
   'astronomia': 'DAS'
 };
 

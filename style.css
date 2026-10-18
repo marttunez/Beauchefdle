@@ -62,8 +62,8 @@ body {
    LAYOUT PRINCIPAL (COMPUTADOR > 860px)
    ========================================================= */
 .app-layout {
-  display: grid;
-  grid-template-columns: 270px 1fr;
+  display: flex;
+  align-items: stretch;
   min-height: 100vh;
 }
 
@@ -76,7 +76,9 @@ body {
 }
 
 .sidebar {
-  padding: 2rem 1.5rem;
+  width: 230px;
+  flex-shrink: 0;
+  padding: 2rem 1.25rem;
   border-right: 2.5px solid var(--margin-red);
   background: rgba(253, 252, 247, 0.86);
   backdrop-filter: blur(4px);
@@ -93,14 +95,14 @@ body {
 }
 
 .masthead .title {
-  font-size: 2.2rem;
+  font-size: 2.05rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--ink);
 }
 
 .masthead .tag {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--margin-red);
   text-transform: uppercase;
@@ -109,7 +111,7 @@ body {
 
 .masthead .sub {
   margin: 0.65rem 0 0;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   line-height: 1.4;
   color: var(--ink-muted);
 }
@@ -117,22 +119,27 @@ body {
 .sidebar-options {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  align-items: flex-start;
+  gap: 0.6rem;
 }
 
 .w-full {
   width: 100%;
 }
 
+/* Botones de la barra izquierda más cortos horizontalmente */
 .mode-btn {
   appearance: none;
+  width: auto !important;
+  min-width: 155px;
+  max-width: 185px;
   border: 2px solid var(--ink);
   background: var(--surface);
   color: var(--ink);
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 800;
-  padding: 0.7rem 1rem;
+  padding: 0.58rem 0.9rem;
   border-radius: 10px;
   cursor: pointer;
   text-align: left;
@@ -156,12 +163,68 @@ body {
   color: var(--ok-ink);
 }
 
+/* =========================================================
+   PESTAÑAS ("VENTANAS") VERTICALES DE DEPARTAMENTOS
+   ========================================================= */
+.dept-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 2.2rem 0 1.5rem 0;
+  margin-left: -2px; /* Pegado a la línea roja de la barra izquierda */
+  z-index: 5;
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+
+.dept-tab {
+  appearance: none;
+  width: fit-content; /* Cada pestaña mide solo lo que ocupa su texto */
+  min-width: 68px;
+  max-width: 135px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 0.75rem 0.5rem 0.65rem;
+  border: 2px solid var(--ink);
+  border-left: none;
+  border-radius: 0 9px 9px 0;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 2px 3px 0 var(--ink);
+  transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, padding-left 0.12s ease;
+  white-space: nowrap;
+}
+
+.dept-tab:hover {
+  padding-left: 0.9rem;
+  background: #f4f6f9;
+}
+
+.dept-tab[aria-pressed="true"] {
+  background: var(--ink);
+  color: #ffffff;
+  padding-left: 0.95rem;
+  box-shadow: 3px 3px 0 var(--margin-red);
+}
+
+/* =========================================================
+   CONTENIDO PRINCIPAL CENTRADO EN COMPUTADOR
+   ========================================================= */
 .main-content {
+  flex: 1;
+  min-width: 0;
   padding: 1.75rem 2rem;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
 }
 
 .panel-card {
@@ -175,8 +238,9 @@ body {
 }
 
 #game-container {
-  width: 100%;
-  max-width: 1200px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
@@ -520,6 +584,385 @@ body {
 }
 
 /* =========================================================
+   MODO BLIND RANKING
+   ========================================================= */
+#ranking-container {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rk-card {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.rk-card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.8rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.rk-card p {
+  margin: 0.4rem 0;
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+.rk-card p b { color: var(--ink); }
+
+.rk-sizes,
+.rk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.rk-btn {
+  appearance: none;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--margin-red);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.rk-btn:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--margin-red);
+}
+.rk-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.rk-btn.ghost {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.rk-btn.ghost:hover:not(:disabled) { box-shadow: 3px 3px 0 var(--ink); }
+.rk-btn:focus-visible,
+.rk-slot:focus-visible { outline: 3px solid var(--part-bg); outline-offset: 2px; }
+
+/* Progreso */
+.rk-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+.rk-bar {
+  flex: 1;
+  height: 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.rk-bar > span {
+  display: block;
+  height: 100%;
+  width: calc(var(--p, 0) * 100%);
+  background: var(--ok-bg);
+  transition: width 0.25s ease;
+}
+
+/* Ramo que hay que ubicar */
+.rk-current {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 4px 4px 0 var(--margin-red);
+}
+.rk-current .rk-code {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.rk-current h3 {
+  margin: 0.15rem 0 0.6rem;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+.rk-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.rk-chip {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--bg-paper);
+}
+.rk-hint {
+  margin: 0.65rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+/* Puestos del ranking */
+.rk-slots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.rk-slots li {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0.6rem;
+  align-items: stretch;
+}
+.rk-pos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--ink);
+  background: color-mix(in srgb, var(--ok-bg), var(--bad-bg) calc(var(--t, 0) * 100%));
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+}
+.rk-slot,
+.rk-filled {
+  min-height: 2.9rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 10px;
+  font-family: inherit;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.rk-slot {
+  appearance: none;
+  border: 2px dashed var(--border);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink-muted);
+  font-weight: 700;
+  cursor: pointer;
+}
+.rk-slot:hover {
+  border-style: solid;
+  border-color: var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+}
+.rk-filled {
+  border: 2px solid var(--ink);
+  background: var(--surface);
+}
+.rk-filled .rk-fname { flex: 1; font-weight: 700; line-height: 1.2; }
+.rk-filled .mono { font-size: 0.8rem; color: var(--ink-muted); white-space: nowrap; }
+.rk-end-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+}
+
+/* =========================================================
+   MODO TIER LIST - PC
+   ========================================================= */
+#tierlist-container {
+  width: 100%;
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tl-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tl-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.tl-header h2 {
+  margin: 0 0 0.2rem 0;
+  font-size: 1.25rem;
+}
+
+.tl-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.tl-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tl-board {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.tl-row {
+  display: flex;
+  min-height: 68px;
+  border-bottom: 2px solid var(--ink);
+  transition: background-color 0.12s ease;
+}
+
+.tl-row:last-child {
+  border-bottom: none;
+}
+
+.tl-row.is-dragover,
+.tl-pool.is-dragover {
+  background-color: rgba(230, 46, 61, 0.08);
+}
+
+.tl-label {
+  appearance: none;
+  border: none;
+  border-right: 2px solid var(--ink);
+  background: var(--tier-bg, #eee);
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 1.4rem;
+  width: 68px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tl-dropzone {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  min-height: 64px;
+}
+
+.tl-pool-section {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 0.75rem 0.95rem;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.tl-pool-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-weight: 800;
+  font-size: 0.88rem;
+  margin-bottom: 0.45rem;
+}
+
+.tl-active-hint {
+  font-weight: 600;
+  color: var(--margin-red);
+}
+
+.tl-pool {
+  border: 2px dashed rgba(17, 28, 45, 0.3);
+  border-radius: 8px;
+  min-height: 80px;
+}
+
+.tl-empty {
+  margin: 0.4rem auto;
+  font-size: 0.85rem;
+  opacity: 0.65;
+}
+
+/* Tarjetas de la Tier List (Nombre principal arriba, código secundario abajo) */
+.tl-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 128px;
+  padding: 0.4rem 0.55rem;
+  background: #f8f9fb;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+}
+
+.tl-item:hover {
+  transform: translateY(-1px);
+  background: var(--surface);
+}
+
+.tl-item.is-selected {
+  background: var(--ink);
+  color: #ffffff;
+  box-shadow: 2px 2px 0 var(--margin-red);
+}
+
+.tl-item.is-dragging {
+  opacity: 0.4;
+}
+
+.tl-name {
+  font-weight: 700;
+  font-size: 0.78rem;
+  line-height: 1.15;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  order: 1;
+}
+
+.tl-code {
+  font-weight: 500;
+  font-size: 0.65rem;
+  opacity: 0.7;
+  margin-top: 0.12rem;
+  order: 2;
+}
+
+/* =========================================================
    VISTA EN CELULAR (<= 860px)
    ========================================================= */
 @media (max-width: 860px) {
@@ -606,7 +1049,7 @@ body {
     top: 0;
     left: 0;
     bottom: 0;
-    width: min(270px, 80vw);
+    width: min(260px, 80vw);
     z-index: 100;
     background: var(--bg-paper);
     border-right: 3px solid var(--margin-red);
@@ -648,27 +1091,66 @@ body {
     color: var(--ink-muted);
   }
 
+  /* Pestañas de departamentos en móvil en barra horizontal superior */
+  .dept-tabs {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Oculta la barra gris fea en Firefox */
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    margin-left: 0;
+    gap: 0.45rem;
+    border-bottom: 1px solid rgba(17, 28, 45, 0.12);
+    flex-shrink: 0;
+  }
+
+  .dept-tabs::-webkit-scrollbar {
+    display: none; /* Oculta la barra de scroll en Chrome/Safari móvil pero permite deslizar */
+  }
+
+  .dept-tab {
+    flex: 0 0 auto;       /* Impide que los botones se achiquen o aplasten */
+    width: auto;
+    min-width: max-content;
+    max-width: none;      /* Quita el límite de ancho para mostrar el texto completo */
+    overflow: visible;
+    text-overflow: clip;
+    border-left: 1.8px solid var(--ink);
+    border-radius: 7px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.76rem;
+    box-shadow: 1.5px 1.5px 0 var(--ink);
+  }
+
+  .dept-tab:hover,
+  .dept-tab[aria-pressed="true"] {
+    padding-left: 0.75rem;
+  }
+
   .main-content {
     flex: 1;
     min-height: 0;
     width: 100%;
-    padding: 0.5rem 4.5vw 1rem;
+    padding: 0.45rem 3.5vw 0.75rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     overflow: hidden;
   }
 
   #game-container {
     width: 100%;
     max-width: 430px;
-    margin: 0 auto;
+    margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.65rem;
+    gap: 0.55rem;
   }
 
   .table-wrapper {
@@ -772,12 +1254,12 @@ body {
   .controls-bar {
     width: 100%;
     flex-shrink: 0;
-    margin-top: 0.15rem;
+    margin-top: 0.1rem;
   }
 
   #search-input {
-    padding: 0.55rem 0.75rem;
-    font-size: 0.88rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.86rem;
     border-width: 1.8px;
     border-radius: 8px;
     box-shadow: 2px 2px 0 var(--ink);
@@ -785,8 +1267,8 @@ body {
 
   #result-btn {
     width: 100%;
-    padding: 0.55rem 0.85rem;
-    font-size: 0.88rem;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.86rem;
     border-radius: 8px;
   }
 
@@ -821,4 +1303,476 @@ body {
     height: 8px;
     margin-left: 0.2rem;
   }
+
+  /* Blind Ranking en celular */
+  #ranking-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-width: 430px;
+    overflow-y: auto;
+    gap: 0.6rem;
+    padding: 0.15rem 6px 0.5rem 2px;
+  }
+  .rk-card { padding: 1rem; }
+  .rk-card h2 { font-size: 1.4rem; }
+  .rk-current {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 0.7rem 0.9rem;
+  }
+  .rk-current .rk-code { font-size: 1.25rem; }
+  .rk-current h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+  .rk-hint { display: none; }
+  .rk-slot,
+  .rk-filled { min-height: 2.5rem; padding: 0.3rem 0.6rem; }
+
+  /* Tier List - PC en celular (todas las tiers visibles + ramos abajo) */
+  #tierlist-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .tl-wrapper {
+    flex: 1;
+    min-height: 0;
+    gap: 0.45rem;
+  }
+
+  .tl-header {
+    padding: 0.4rem 0.65rem;
+    gap: 0.4rem;
+    border-radius: 9px;
+    box-shadow: 2px 2px 0 var(--ink);
+    flex-shrink: 0;
+  }
+
+  .tl-header h2 {
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .tl-sub {
+    display: none;
+  }
+
+  .tl-actions .rk-btn {
+    padding: 0.28rem 0.55rem;
+    font-size: 0.74rem;
+  }
+
+  .tl-board {
+    border-radius: 9px;
+    box-shadow: 2px 2px 0 var(--ink);
+    flex-shrink: 0;
+  }
+
+  .tl-row {
+    min-height: 44px;
+  }
+
+  .tl-label {
+    width: 42px;
+    font-size: 1.05rem;
+  }
+
+  .tl-dropzone {
+    min-height: 42px;
+    padding: 0.2rem 0.35rem;
+    gap: 0.25rem;
+  }
+
+  /* En celular el nombre se ve protagonista (2 líneas) y el código pequeño abajo */
+  .tl-item {
+    width: calc(33.333% - 0.22rem);
+    min-width: 84px;
+    max-width: 118px;
+    padding: 0.22rem 0.35rem;
+    border-radius: 6px;
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  .tl-name {
+    font-size: 0.64rem;
+    line-height: 1.1;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .tl-code {
+    font-size: 0.54rem;
+    margin-top: 0.05rem;
+  }
+
+  .tl-pool-section {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0.4rem 0.55rem;
+    border-radius: 9px;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .tl-pool-head {
+    font-size: 0.76rem;
+    margin-bottom: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  .tl-active-hint {
+    font-size: 0.7rem;
+  }
+
+  .tl-pool {
+    flex: 1;
+    min-height: 54px;
+    overflow-y: auto;
+    align-content: flex-start;
+  }
+}
+
+/* =========================================================
+   ESQUINA SUPERIOR DERECHA: COPA LEADERBOARD + USUARIO
+   ========================================================= */
+.top-right-actions {
+  position: fixed;
+  top: 1rem;
+  right: 1.5rem;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.trophy-btn {
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--part-bg);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  flex-shrink: 0;
+}
+
+.trophy-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.user-box {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 0.35rem 0.55rem;
+  box-shadow: 2px 2px 0 var(--ink);
+  display: flex;
+  align-items: center;
+}
+
+.user-logged {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  color: var(--ink);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-logout-btn {
+  appearance: none;
+  border: 1.5px solid var(--ink);
+  background: #f1f5f9;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 0.24rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.user-logout-btn:hover {
+  background: var(--bad-bg);
+  color: #ffffff;
+}
+
+.user-guest-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.user-auth-btn {
+  appearance: none;
+  border: 1.8px solid var(--ink);
+  background: var(--ink);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 0.34rem 0.65rem;
+  border-radius: 7px;
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px 0 var(--margin-red);
+  white-space: nowrap;
+}
+
+.user-auth-btn.ghost {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 1.5px 1.5px 0 var(--ink);
+}
+
+/* Modal de Leaderboards (Copa) */
+.lb-dialog {
+  max-width: 440px;
+}
+
+.lb-modal-card h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.lb-modal-sub {
+  margin: 0.35rem 0 0.85rem;
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+}
+
+.lb-modal-list {
+  min-height: 120px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Modal de Autenticación */
+.auth-dialog {
+  max-width: 380px;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.auth-tab {
+  flex: 1;
+  appearance: none;
+  border: 1.8px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.auth-tab[aria-pressed="true"] {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.auth-desc {
+  margin: 0 0 0.85rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.auth-field input {
+  padding: 0.6rem 0.75rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.92rem;
+}
+
+.auth-error {
+  margin: 0;
+  padding: 0.45rem 0.65rem;
+  background: #ffe4e6;
+  border: 1.5px solid var(--margin-red);
+  color: var(--margin-red);
+  border-radius: 7px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.pts-badge {
+  color: var(--ok-bg);
+}
+
+.lb-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-right: 1.5rem;
+}
+
+.lb-header-row h3 {
+  margin: 0;
+}
+
+.lb-switch {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.lb-tab-btn {
+  appearance: none;
+  border: 1.5px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.lb-tab-btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.lb-login-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.6rem 0.75rem;
+  background: #f8fafc;
+  border: 1.5px dashed var(--border);
+  border-radius: 8px;
+  margin-bottom: 0.65rem;
+}
+
+.lb-status-msg {
+  margin: 0 0 0.5rem;
+}
+
+/* Ajuste en celular para la esquina superior derecha */
+@media (max-width: 860px) {
+  .mobile-mode-badge {
+    display: none; /* Deja espacio en la barra superior móvil para la copa y el usuario */
+  }
+
+  .top-right-actions {
+    top: 0.42rem;
+    right: 0.75rem;
+    gap: 0.35rem;
+  }
+
+  .trophy-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border-width: 1.8px;
+    box-shadow: 1.5px 1.5px 0 var(--ink);
+  }
+
+  .user-box {
+    padding: 0.2rem 0.35rem;
+    border-radius: 8px;
+    border-width: 1.8px;
+    box-shadow: 1.5px 1.5px 0 var(--ink);
+  }
+
+  .user-auth-btn {
+    font-size: 0.68rem;
+    padding: 0.24rem 0.45rem;
+  }
+
+  .user-name {
+    font-size: 0.75rem;
+    max-width: 90px;
+  }
+
+  .user-logout-btn {
+    font-size: 0.68rem;
+    padding: 0.18rem 0.38rem;
+  }
+}
+
+/* Evitar que la copa y el usuario tapen el juego y darle espacio arriba */
+@media (min-width: 861px) {
+  .main-content {
+    padding-top: 4.5rem !important; /* Desplaza el juego hacia abajo para dejar libre la esquina superior derecha */
+  }
+}
+
+/* Estilos de la sección TOP 5 en la Leaderboard */
+.top5-section {
+  background: #f8fafc;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.top5-title {
+  margin: 0 0 0.4rem 0;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--margin-red);
+}
+
+.top5-list li {
+  padding: 0.3rem 0;
+  font-size: 0.92rem;
+}
+
+.top5-item.rank-1 {
+  font-weight: 800;
+  color: #b45309; /* Color oro sutil */
+}
+
+.top5-item.rank-2 {
+  color: #475569; /* Plata */
+}
+
+.top5-item.rank-3 {
+  color: #9a3412; /* Bronce */
+}
+
+.rest-list {
+  max-height: 140px;
+  overflow-y: auto;
 }

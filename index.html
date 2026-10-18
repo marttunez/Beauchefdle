@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#ffffff">
+  <meta name="google-site-verification" content="h6YcIRb757B3m4DNBKD2YxB93Zib4Z03bpk20cORZwA" />
   <title>Beauchefdle</title>
   <link rel="icon" href="assets/favicon.png" type="image/png">
 
@@ -31,6 +32,21 @@
       </div>
     </header>
 
+    <!-- Esquina superior derecha: Copa de Leaderboards + Usuario -->
+    <div class="top-right-actions" aria-label="Ranking y cuenta de usuario">
+      <button type="button" id="trophy-btn" class="trophy-btn" title="Ver Leaderboards" aria-label="Ver Leaderboards">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+          <path d="M4 22h16"></path>
+          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+        </svg>
+      </button>
+      <div id="user-box" class="user-box"></div>
+    </div>
+
     <!-- Fondo oscuro al abrir la barra lateral en celular -->
     <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
 
@@ -51,14 +67,19 @@
         <p class="sidebar-section-label">Modo de juego</p>
         <button type="button" class="mode-btn w-full" data-mode="daily" aria-pressed="false">Ramo del día</button>
         <button type="button" class="mode-btn w-full" data-mode="practice" aria-pressed="false">Práctica libre</button>
+        <button type="button" class="mode-btn w-full" data-mode="ranking" aria-pressed="false">Blind ranking</button>
+        <button type="button" class="mode-btn w-full" data-mode="tierlist" aria-pressed="false">Tier List - PC</button>
       </nav>
     </aside>
+
+    <!-- Pestañas ("ventanas") de departamentos y Plan Común al lado de la barra izquierda -->
+    <nav id="dept-tabs" class="dept-tabs" aria-label="Filtrar por departamento" hidden></nav>
 
     <!-- Contenido principal del juego -->
     <main class="main-content">
       <!-- Solo se muestra si abres el archivo con doble clic (file://) -->
       <section id="file-warning" class="panel-card" hidden>
-        <p><b>Juego basado en Wordle ambientado en los ramos de Beauchef</b></p>
+        <p><b>Abre el juego desde un servidor local.</b> Los navegadores bloquean los módulos de JavaScript al abrir el HTML directamente. En esta carpeta ejecuta <code class="mono">python -m http.server</code> y entra a <code class="mono">http://localhost:8000</code>.</p>
       </section>
 
       <noscript><p class="panel-card">Beauchefdle necesita JavaScript para funcionar.</p></noscript>
@@ -103,6 +124,12 @@
           <p class="legend-sub">En números: <b>↑</b> el buscado es mayor · <b>↓</b> es menor.</p>
         </footer>
       </section>
+
+      <!-- Modo Blind ranking: se llena desde js/ranking-ui.js -->
+      <section id="ranking-container" aria-label="Blind ranking" hidden></section>
+
+      <!-- Modo Tier List - PC: se llena desde js/tierlist-ui.js -->
+      <section id="tierlist-container" aria-label="Tier List Plan Común" hidden></section>
     </main>
   </div>
 
@@ -110,6 +137,47 @@
   <dialog id="end-dialog" class="end-dialog" aria-labelledby="end-title">
     <button type="button" id="end-close" class="dialog-close" aria-label="Cerrar">✕</button>
     <div id="end-card" class="end-card"></div>
+  </dialog>
+
+  <!-- Ventana de Leaderboards (se abre al tocar la copa 🏆) -->
+  <dialog id="lb-dialog" class="end-dialog lb-dialog" aria-labelledby="lb-modal-title">
+    <button type="button" id="lb-close" class="dialog-close" aria-label="Cerrar">✕</button>
+    <div class="lb-modal-card">
+      <div class="lb-header-row">
+        <h2 id="lb-modal-title">🏆 Leaderboards</h2>
+        <div class="lb-switch">
+          <button type="button" class="lb-tab-btn" data-modal-lb-tab="daily" aria-pressed="true">Hoy</button>
+          <button type="button" class="lb-tab-btn" data-modal-lb-tab="general" aria-pressed="false">Acumulado</button>
+        </div>
+      </div>
+      <p class="lb-modal-sub">Puntajes de Ramo del día (1° intento: 30 pts · 2°: 20 · 3°: 15 · 4°: 10 · 5°: 8 · 6°: 6)</p>
+      <div id="lb-modal-list" class="lb-list lb-modal-list"><small>Cargando ranking…</small></div>
+    </div>
+  </dialog>
+
+  <!-- Ventana de Crear Usuario / Iniciar Sesión -->
+  <dialog id="auth-dialog" class="end-dialog auth-dialog" aria-labelledby="auth-title">
+    <button type="button" id="auth-close" class="dialog-close" aria-label="Cerrar">✕</button>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab" data-auth-tab="login" aria-pressed="true">Iniciar sesión</button>
+        <button type="button" class="auth-tab" data-auth-tab="register" aria-pressed="false">Crear usuario</button>
+      </div>
+      <h2 id="auth-title">Iniciar sesión</h2>
+      <p id="auth-desc" class="auth-desc">Ingresa con tu usuario único para guardar tus puntos del día.</p>
+      <form id="auth-form" class="auth-form">
+        <label class="auth-field">
+          <span>Nombre de usuario</span>
+          <input type="text" id="auth-username" placeholder="Ej. beauchefiano" minlength="2" maxlength="20" required autocomplete="username">
+        </label>
+        <label class="auth-field">
+          <span>Contraseña</span>
+          <input type="password" id="auth-password" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="current-password">
+        </label>
+        <p id="auth-error" class="auth-error" hidden></p>
+        <button type="submit" id="auth-submit" class="rk-btn">Entrar</button>
+      </form>
+    </div>
   </dialog>
 
   <script>
@@ -120,12 +188,14 @@
     // Diagnóstico: si el juego no arranca, muestra POR QUÉ en vez de dejar la pantalla vacía.
     (function () {
       var REQUIRED = ['style.css', 'ramos.json', 'js/app.js', 'js/game.js', 'js/utils.js',
-                      'js/departamentos.js', 'js/leaderboard.js'];
+                      'js/departamentos.js', 'js/leaderboard.js', 'js/ranking.js', 'js/ranking-ui.js',
+                      'js/tierlist-ui.js'];
       var box = document.getElementById('boot-error');
       var shown = false;
 
       function booted() {
-        return !document.getElementById('game-container').hidden || !document.getElementById('loader').hidden;
+        return !document.getElementById('game-container').hidden || !document.getElementById('loader').hidden ||
+               !document.getElementById('ranking-container').hidden || !document.getElementById('tierlist-container').hidden;
       }
       function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
 

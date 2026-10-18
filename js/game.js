@@ -4,6 +4,9 @@ import { departmentKey, departmentLabel } from './departamentos.js';
 // Cantidad de intentos por partida (como las 6 filas de Wordle)
 export const MAX_ATTEMPTS = 6;
 
+// Mínimo de ramos para que un departamento aparezca como opción
+export const MIN_DEPT_COURSES = 5;
+
 export const COLUMN_DEFINITIONS = [
   { key: 'departamento', label: 'Departamento',      type: 'exact', canon: departmentKey, format: departmentLabel },
   { key: 'creditos',     label: 'Créditos',          type: 'num' },
@@ -14,26 +17,40 @@ export const COLUMN_DEFINITIONS = [
   { key: 'carreras',     label: 'Carreras',          type: 'set' }
 ];
 
+// Identifica ramos de Plan Común:
+// - Si el JSON trae `plan_comun: true`, lo usa.
+// - Si no, considera los ramos obligatorios de nivel 1 y 2 (1° y 2° año).
+export function isPlanComun(course) {
+  if (!course) return false;
+  if (typeof course.plan_comun === 'boolean') return course.plan_comun;
+  if (canonicalLabel(course.departamento).includes('plan comun')) return true;
+  const nivel = Number(course.nivel);
+  return (nivel === 1 || nivel === 2) && canonicalLabel(course.caracter) === 'obligatorio';
+}
+
 export class BeauchldeGame {
   constructor(database, { maxAttempts = MAX_ATTEMPTS } = {}) {
-    this.db = (Array.isArray(database) ? database : database.ramos || [])
+    this.allDb = (Array.isArray(database) ? database : database.ramos || [])
       .filter(item => item && item.codigo && item.nombre);
 
-    if (this.db.length < 2) {
+    if (this.allDb.length < 2) {
       throw new Error('La base requiere al menos 2 ramos válidos con código y nombre.');
     }
 
+    this.department = 'ALL'; // 'ALL' | 'PLAN_COMUN' | sigla de departamento
+    this.db = this.allDb;
+
     // Activar columnas presentes en al menos el 50% de los datos
     this.activeColumns = COLUMN_DEFINITIONS.filter(def => {
-      const count = this.db.filter(c => this.getValue(c, def) != null).length;
-      return count >= this.db.length * 0.5;
+      const count = this.allDb.filter(c => this.getValue(c, def) != null).length;
+      return count >= this.allDb.length * 0.5;
     });
 
     // Para columnas de texto, muestra siempre la escritura más frecuente de cada valor
     this.displayNames = {};
     for (const def of this.activeColumns.filter(d => d.type === 'exact')) {
       const groups = new Map();
-      for (const c of this.db) {
+      for (const c of this.allDb) {
         const v = this.getValue(c, def);
         if (v == null) continue;
         const k = (def.canon || canonicalLabel)(v);
@@ -53,6 +70,68 @@ export class BeauchldeGame {
     this.guesses = [];
     this.finished = false;
     this.maxAttempts = maxAttempts;
+  }
+
+  /** Cantidad de ramos de Plan Común disponibles */
+  /** Cantidad de ramos de Plan Común disponibles */
+  getPlanComunCount() {
+    return this.allDb.filter(isPlanComun).length;
+  }
+
+  /** Devuelve los departamentos disponibles con al menos MIN_DEPT_COURSES ramos */
+  getAvailableDepartments(minCourses = MIN_DEPT_COURSES) {
+    const counts = new Map();
+    const rawNames = new Map();
+
+    for (const c of this.allDb) {
+      if (!c.departamento) continue;
+      const key = departmentKey(c.departamento);
+      counts.set(key, (counts.get(key) || 0) + 1);
+      if (!rawNames.has(key)) rawNames.set(key, c.departamento);
+    }
+
+    const list = [];
+    for (const [key, count] of counts.entries()) {
+      // Oculta departamentos con menos de X ramos (y evita duplicar Plan Común si viene como depto)
+      if (count >= minCourses && key !== 'PLAN_COMUN') {
+        list.push({
+          key,
+          label: departmentLabel(rawNames.get(key)),
+          fullName: rawNames.get(key),
+          count
+        });
+      }
+    }
+    return list.sort((a, b) => a.label.localeCompare(b.label));
+  }
+
+  /** Cambia el filtro activo ('ALL', 'PLAN_COMUN', o sigla de departamento) */
+  setDepartment(deptKey = 'ALL') {
+    if (!deptKey || deptKey === 'ALL') {
+      this.department = 'ALL';
+      this.db = this.allDb;
+      return;
+    }
+
+    if (deptKey === 'PLAN_COMUN') {
+      const filtered = this.allDb.filter(isPlanComun);
+      if (filtered.length >= MIN_DEPT_COURSES) {
+        this.department = 'PLAN_COMUN';
+        this.db = filtered;
+        return;
+      }
+    }
+
+    const filtered = this.allDb.filter(
+      c => c.departamento && departmentKey(c.departamento) === deptKey
+    );
+    if (filtered.length >= MIN_DEPT_COURSES) {
+      this.department = deptKey;
+      this.db = filtered;
+    } else {
+      this.department = 'ALL';
+      this.db = this.allDb;
+    }
   }
 
   getValue(course, def) {
@@ -77,7 +156,8 @@ export class BeauchldeGame {
   }
 
   getStoreKey() {
-    return `beauchefdle:${getTodayKey()}`;
+    const deptSuffix = this.department === 'ALL' ? '' : `:${this.department}`;
+    return `beauchefdle:${getTodayKey()}${deptSuffix}`;
   }
 
   pickAnswer() {
@@ -89,7 +169,8 @@ export class BeauchldeGame {
       .sort((a, b) => a.codigo.localeCompare(b.codigo));
 
     if (this.isDaily) {
-      const index = fnv1aHash(`beauchefdle-cl-${getTodayKey()}`) % pool.length;
+      const seed = `beauchefdle-cl-${getTodayKey()}-${this.department}`;
+      const index = fnv1aHash(seed) % pool.length;
       return pool[index];
     }
     return pool[Math.floor(Math.random() * pool.length)];
@@ -216,7 +297,9 @@ export class BeauchldeGame {
       this.activeColumns.map(col => emojis[this.compareAttribute(g, this.answer, col).status]).join('')
     ).join('\n');
 
-    const title = this.isDaily ? `Beauchefdle ${getTodayKey()}` : 'Beauchefdle (práctica)';
+    const labelMap = { ALL: '', PLAN_COMUN: ' [Plan Común]' };
+    const deptTag = labelMap[this.department] ?? ` [${this.department}]`;
+    const title = this.isDaily ? `Beauchefdle${deptTag} ${getTodayKey()}` : `Beauchefdle${deptTag} (práctica)`;
     const score = `${this.won ? this.guesses.length : 'X'}/${this.maxAttempts}`;
     return `${title} — ${score}\n${grid}`;
   }
