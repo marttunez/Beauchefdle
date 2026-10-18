@@ -1,6 +1,24 @@
 {
-  "generado": "2026-10-16",
+  "generado": "2026-10-17",
   "ramos": [
+    {
+      "departamento": "ingenieria quimica biotecnologia y materiales",
+      "nombre": "Aplicaciones de la Biología a la Ingeniería y Ciencias",
+      "codigo": "BT1211",
+      "creditos": 3,
+      "nombre_en": "Biology Applications in Science and Engineering",
+      "horas_docencia": 3,
+      "horas_auxiliares": null,
+      "horas_trabajo": 2,
+      "caracter": "Obligatorio",
+      "requisitos_texto": null,
+      "requisitos": [],
+      "archivo": "BT1211.pdf",
+      "area": "BT",
+      "nivel": 1,
+      "n_requisitos": 0,
+      "horas_total": 5
+    },
     {
       "departamento": "Ciencias de la Computación",
       "nombre": "Herramientas Computacionales para Ingeniería y Ciencias",
@@ -693,9 +711,68 @@
       "horas_total": 5
     },
     {
+      "departamento": "Ingeniería y Ciencias (Plan Común)",
+      "nombre": "Desafíos de innovación en ingeniería y Ciencias",
+      "codigo": "CD1100",
+      "creditos": 6,
+      "nombre_en": "Innovation Challenges in Engineering and Science",
+      "horas_docencia": 3,
+      "horas_auxiliares": null,
+      "horas_trabajo": 7,
+      "caracter": "Obligatorio",
+      "requisitos_texto": null,
+      "requisitos": [],
+      "archivo": "CD1100.pdf",
+      "area": "CD",
+      "nivel": 1,
+      "n_requisitos": 0,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Ingeniería y Ciencias (Plan Común)",
+      "nombre": "Proyecto de Innovación en Ingeniería y Ciencias",
+      "codigo": "CD1201",
+      "creditos": 3,
+      "nombre_en": "Innovation Project in Engineering and Science",
+      "horas_docencia": 3,
+      "horas_auxiliares": null,
+      "horas_trabajo": 2,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "CD1100: Desafío de Innovación en Ingeniería y Ciencias",
+      "requisitos": [
+        "CD1100"
+      ],
+      "archivo": "CD1201.pdf",
+      "area": "CD",
+      "nivel": 1,
+      "n_requisitos": 1,
+      "horas_total": 5
+    },
+    {
+      "departamento": "Ingeniería y Ciencias (Plan Común)",
+      "nombre": "Módulo interdisciplinario",
+      "codigo": "CD2201",
+      "creditos": 3,
+      "nombre_en": "Interdisciplinary module",
+      "horas_docencia": 1.5,
+      "horas_auxiliares": null,
+      "horas_trabajo": 3.5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "▪ CD1201 Proyecto de innovación en Ingeniería y Ciencias. ▪ FI2003 Métodos Experimentales",
+      "requisitos": [
+        "CD1201",
+        "FI2003"
+      ],
+      "archivo": "CD2201.pdf",
+      "area": "CD",
+      "nivel": 2,
+      "n_requisitos": 2,
+      "horas_total": 5
+    },
+    {
       "departamento": "Ciencias de la Computación",
       "nombre": "Diseño de Sistemas de Internet de las Cosas",
-      "codigo": "CRÉDITOS",
+      "codigo": "CC5326",
       "creditos": 6,
       "nombre_en": "Design of Internet-of-Things Systems",
       "horas_docencia": 3,
@@ -987,7 +1064,8 @@
     },
     {
       "codigo": "GL4010",
-      "nombre": "Código nombre",
+      "nombre": "Proyecto I",
+      "creditos": 6,
       "departamento": "Geología",
       "caracter": "Electivo",
       "requisitos_texto": "GL4001; AUTOR Electivo de Licenciatura Resultados de Aprendizaje El estudiante demuestra que de manera independiente y con la guía de un profesor: • Puede realizar una investigación bibliográfica, o • Puede realizar un trabajo de laboratorio, o • Puede realizar un trabajo de terreno, o • Puede realizar una combinación de las actividades anteriores, en el ámbito de la Geología o de una disciplina relacionada. Metodología Docente Evaluación General • Las estrategias metodológicas a desarrollar serán La evaluación consistirá en: propuestas por el profesor guía y • pueden ser de variada índole (revisión bibliográfica, • Un informe global (100%) que será calificado experiencia de laboratorio, levantamiento de por el respectivo profesor guía del proyecto. información en terreno). • No incluye clases lectivas. • El trabajo es personal. • El tema del proyecto puede ser propuesto a un profesor por el estudiante u ofrecido por un profesor del Departamento de Geología*. * Se pueden solicitar recursos al Departamento para su realización por lo cual debe ser aprobado por el Jefe Docente.",
@@ -1202,6 +1280,44 @@
       "area": "GL",
       "nivel": 4,
       "n_requisitos": 2,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Ingeniería Industrial",
+      "nombre": "Economía",
+      "codigo": "IN2201",
+      "creditos": 6,
+      "nombre_en": "Economics",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "Cálculo en Varias Variables - MA2001",
+      "requisitos": [
+        "MA2001"
+      ],
+      "archivo": "IN2201.pdf",
+      "area": "IN",
+      "nivel": 2,
+      "n_requisitos": 1,
+      "horas_total": 10
+    },
+    {
+      "departamento": "ingenieria quimica biotecnologia y materiales",
+      "nombre": "Termodinámica Química",
+      "codigo": "IQ2211",
+      "creditos": 6,
+      "nombre_en": "Chemistry Thermodynamics",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "• Mecánica FI 2001 • Química IQ 2211 • Cálculo en Varias Variables MA 2001",
+      "requisitos": [],
+      "archivo": "IQ2212.pdf",
+      "area": "IQ",
+      "nivel": 2,
+      "n_requisitos": 0,
       "horas_total": 10
     },
     {
