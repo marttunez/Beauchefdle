@@ -919,7 +919,7 @@
     },
     {
       "codigo": "FI3001",
-      "nombre": "Nombre del",
+      "nombre": "Vibraciones y Ondas",
       "creditos": 6,
       "horas_docencia": 3,
       "horas_auxiliares": 1.5,
@@ -1388,8 +1388,7 @@
       "caracter": "Obligatorio",
       "requisitos_texto": "MA1101 Introducción al Álgebra. Adicionalmente se espera que el estudiante maneje la operatoria básica de cálculo de derivadas de polinomios, materia vista en MA1001 Introducción al cálculo.",
       "requisitos": [
-        "MA1101",
-        "MA1001"
+        "MA1101"
       ],
       "archivo": "MA1102.pdf",
       "area": "MA",
