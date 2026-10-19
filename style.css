@@ -1729,50 +1729,65 @@ body {
   }
 }
 
-/* Evitar que la copa y el usuario tapen el juego y darle espacio arriba */
+
+/* =========================================================
+   AJUSTES DE POSICIÓN EN PC Y TÍTULO EN MÓVIL
+   ========================================================= */
+
+/* Por defecto en PC el título sobre la tabla está oculto (ya está en la sidebar izquierda) */
+.mobile-game-title {
+  display: none;
+}
+
+/* En PC: mover el juego hacia la izquierda para que la copa y usuario nunca lo tapen */
 @media (min-width: 861px) {
+  .mobile-topbar {
+    display: contents;
+  }
+  .mobile-topbar > .menu-toggle,
+  .mobile-topbar > .mobile-brand {
+    display: none;
+  }
+
   .main-content {
-    padding-top: 4.5rem !important; /* Desplaza el juego hacia abajo para dejar libre la esquina superior derecha */
+    align-items: flex-start; /* Mueve el tablero hacia la izquierda */
+    padding-left: 2.5rem;
+    padding-right: 17rem;    /* Deja libre la zona derecha donde están la copa y los botones */
+  }
+
+  #game-container {
+    margin: 0;               /* Evita que se centre y choque con la esquina derecha */
   }
 }
 
-/* Estilos de la sección TOP 5 en la Leaderboard */
-.top5-section {
-  background: #f8fafc;
-  border: 2px solid var(--ink);
-  border-radius: 10px;
-  padding: 0.65rem 0.85rem;
-  margin-bottom: 0.5rem;
-  box-shadow: 2px 2px 0 var(--ink);
-}
+/* En Móvil: quitar "Be..." de la barra superior y poner "Beauchefdle" arriba de la tabla */
+@media (max-width: 860px) {
+  .mobile-topbar {
+    justify-content: space-between;
+    padding: 0.4rem 0.65rem;
+  }
 
-.top5-title {
-  margin: 0 0 0.4rem 0;
-  font-size: 0.88rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--margin-red);
-}
+  /* Oculta el "Be..." de la barra superior en celular */
+  .mobile-brand {
+    display: none !important;
+  }
 
-.top5-list li {
-  padding: 0.3rem 0;
-  font-size: 0.92rem;
-}
+  /* Copa y botones de usuario cómodos a la derecha de la barra superior */
+  .top-right-actions {
+    position: static;
+    margin-left: auto;
+    gap: 0.35rem;
+  }
 
-.top5-item.rank-1 {
-  font-weight: 800;
-  color: #b45309; /* Color oro sutil */
-}
-
-.top5-item.rank-2 {
-  color: #475569; /* Plata */
-}
-
-.top5-item.rank-3 {
-  color: #9a3412; /* Bronce */
-}
-
-.rest-list {
-  max-height: 140px;
-  overflow-y: auto;
+  /* Muestra "Beauchefdle" justo arriba de la tabla en Ramo del día y Práctica libre */
+  .mobile-game-title {
+    display: block;
+    margin: 0 0 0.15rem 0;
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    text-align: center;
+    line-height: 1.1;
+  }
 }

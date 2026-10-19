@@ -14,8 +14,8 @@ const SESSION_KEY = 'beauchefdle:auth_session';
  */
 export function calculatePoints(intentos, gano) {
   if (!gano) return 0;
-  const bonusByAttempt = { 1: 30, 2: 20, 3: 15, 4: 10, 5: 8, 6: 6 };
-  return 0 + (bonusByAttempt[Number(intentos)] || 0);
+  const bonusByAttempt = { 1: 25, 2: 15, 3: 10, 4: 5, 5: 3, 6: 1 };
+  return (bonusByAttempt[Number(intentos)] || 0);
 }
 
 // Convierte un nombre de usuario único en un email sintético interno para Supabase Auth
