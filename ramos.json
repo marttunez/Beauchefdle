@@ -1305,7 +1305,7 @@
     {
       "departamento": "ingenieria quimica biotecnologia y materiales",
       "nombre": "Termodinámica Química",
-      "codigo": "IQ2211",
+      "codigo": "IQ2212",
       "creditos": 6,
       "nombre_en": "Chemistry Thermodynamics",
       "horas_docencia": 3,
@@ -1658,6 +1658,26 @@
       "area": "MA",
       "nivel": 4,
       "n_requisitos": 1,
+      "horas_total": 10
+    },
+    {
+      "departamento": "Ingenierí Química",
+      "nombre": "Química",
+      "codigo": "IQ2211",
+      "creditos": 6,
+      "nombre_en": "Chemistry",
+      "horas_docencia": 3,
+      "horas_auxiliares": 2,
+      "horas_trabajo": 5,
+      "caracter": "Obligatorio",
+      "requisitos_texto": "FI1100: Física I, CC1002: Introducción a la Computación",
+      "requisitos": [
+        "FI1100", "CC1002"
+      ],
+      "archivo": "IQ2211.pdf",
+      "area": "IQ",
+      "nivel": 4,
+      "n_requisitos": 2,
       "horas_total": 10
     }
   ]

@@ -180,8 +180,58 @@
     </div>
   </dialog>
 
+<!-- MENSAJE DE BIENVENIDA: se abre cada vez que se carga la página (celular y computador).
+       Se puede cerrar con la ✕, con "Entendido", con Esc o tocando fuera, pero volverá a salir
+       la próxima vez que se abra la aplicación. -->
+  <dialog id="welcome-dialog" class="end-dialog welcome-dialog" aria-labelledby="welcome-title">
+    <button type="button" id="welcome-close" class="dialog-close" aria-label="Cerrar">✕</button>
+    <div class="welcome-card">
+      <!-- ✏️ ESCRIBE AQUÍ EL TÍTULO Y EL MENSAJE (usa un <p> por cada párrafo) -->
+      <h2 id="welcome-title">NAWAK Y JAVI</h2>
+      <div class="welcome-body">
+        <p>Nawak y Javi, se ganaron un paquete de galletas tritón cada uno por su consistencia en Beauchefdle, por favor hablarme a instagram @martunez80 para canjearlo</p>
+      </div>
+      <!-- ✏️ FIN DEL MENSAJE -->
+      <div class="welcome-actions">
+        <button type="button" id="welcome-ok" class="rk-btn">WTF OKAY YA VOY</button>
+      </div>
+    </div>
+  </dialog>
+
   <script>
     if (location.protocol === 'file:') document.getElementById('file-warning').hidden = false;
+  </script>
+  <script>
+    // Abre el mensaje de bienvenida SIEMPRE al cargar (no recuerda si ya lo cerraste).
+    (function () {
+      var dlg = document.getElementById('welcome-dialog');
+      if (!dlg) return;
+
+      function cerrar() {
+        if (dlg.open) dlg.close();
+      }
+
+      document.getElementById('welcome-close').addEventListener('click', cerrar);
+      document.getElementById('welcome-ok').addEventListener('click', cerrar);
+
+      // Tocar fuera de la ventana (en el fondo oscuro) también la cierra
+      dlg.addEventListener('click', function (e) {
+        if (e.target !== dlg) return;
+        var r = dlg.getBoundingClientRect();
+        var dentro =
+          e.clientX >= r.left &&
+          e.clientX <= r.right &&
+          e.clientY >= r.top &&
+          e.clientY <= r.bottom;
+        if (!dentro) cerrar();
+      });
+
+      if (typeof dlg.showModal === 'function') {
+        dlg.showModal();
+      } else {
+        dlg.setAttribute('open', '');
+      }
+    })();
   </script>
 
   <script>
