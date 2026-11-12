@@ -1791,3 +1791,53 @@ body {
     line-height: 1.1;
   }
 }
+
+/* =========================================================
+   MENSAJE DE BIENVENIDA (se abre al cargar la página)
+   ========================================================= */
+.welcome-dialog {
+  max-width: 440px;
+  max-height: calc(100dvh - 2rem); /* un mensaje largo se desplaza dentro de la ventana */
+  overflow-y: auto;
+}
+
+.welcome-card h2 {
+  margin: 0 0 0.6rem;
+  padding-right: 1.8rem; /* deja libre la esquina del botón ✕ */
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.welcome-body {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.welcome-body p {
+  margin: 0 0 0.7rem;
+}
+
+.welcome-body p:last-child {
+  margin-bottom: 0;
+}
+
+.welcome-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+@media (max-width: 860px) {
+  .welcome-dialog {
+    padding: 1.1rem;
+  }
+
+  .welcome-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .welcome-body {
+    font-size: 0.9rem;
+  }
+}
